@@ -1,0 +1,13 @@
+.minecraft/
+run.ps1
+modules/__pycache__/
+build/
+dist/
+logs/
+/cache
+/minescript
+/temp
+/config
+run.bat
+/logs
+.DS_Store

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI from passport.ui</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .ui-container {
+            width: 688px;
+            background: white;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        /* Basic styling for Qt-like appearance */
+        .qt-layout {
+            margin: 4px 0;
+        }
+        button, input[type="text"], select, textarea {
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            background: #f0f0f0;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #e0e0e0;
+        }
+        fieldset {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        legend {
+            font-weight: bold;
+            padding: 0 5px;
+        }
+        /* Style for custom widgets */
+        .qt-cardwidget {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 12px;
+            background: #fafafa;
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="ui-container">
+        <div id="Form" class="qt-qwidget"><div class="qt-layout verticalLayout_3" style="display: flex; flex-direction: column; gap: 8px;"><div id="TitleLabel" class="qt-titlelabel">通行证</div><div id="SmoothScrollArea" class="qt-smoothscrollarea"><div id="scrollAreaWidgetContents" class="qt-qwidget"><div class="qt-layout verticalLayout_5" style="display: flex; flex-direction: column; gap: 8px;"><div id="openGLWidget" class="qt-qopenglwidget"></div><div id="label_3" class="qt-subtitlelabel">Minecraft 账户</div><div id="CardWidget_5" class="qt-cardwidget"><div class="qt-layout horizontalLayout_2" style="display: flex; flex-direction: row; gap: 8px; align-items: center;"><div class="qt-layout verticalLayout_2" style="display: flex; flex-direction: column; gap: 8px;"><div id="label_4" class="qt-strongbodylabel">目前登录</div><div id="CaptionLabel_4" class="qt-captionlabel">您目前登录的账户</div></div><div id="player_login_way" class="qt-combobox"></div><div id="playername" class="qt-combobox"></div></div></div><div id="CardWidget_4" class="qt-cardwidget"><div class="qt-layout horizontalLayout" style="display: flex; flex-direction: row; gap: 8px; align-items: center;"><div class="qt-layout verticalLayout" style="display: flex; flex-direction: column; gap: 8px;"><div id="label_2" class="qt-strongbodylabel">选择登录方式</div><div id="CaptionLabel_3" class="qt-captionlabel">请记得单击设定，否则更改不会生效</div></div><div id="login_way" class="qt-combobox"></div><div id="login" class="qt-pushbutton">重新登录</div></div></div><div id="CardWidget_2" class="qt-cardwidget"><div class="qt-layout horizontalLayout_5" style="display: flex; flex-direction: row; gap: 8px; align-items: center;"><div class="qt-layout verticalLayout_6" style="display: flex; flex-direction: column; gap: 8px;"><div id="go_Minecraft_Account_To_Bloret_PassPort_Cloud_title" class="qt-strongbodylabel"> 同步到 Bloret PassPort</div><div id="go_Minecraft_Account_To_Bloret_PassPort_Cloud_sub_title" class="qt-captionlabel">将您的 Minecraft  账户上传到云端，以便在其他设备上快速登录</div></div><div id="go_Minecraft_Account_To_Bloret_PassPort_Cloud_to" class="qt-pushbutton">同步到云端</div><div id="go_Minecraft_Account_To_Bloret_PassPort_Cloud_from" class="qt-pushbutton">从云端下载</div></div></div><div id="SubtitleLabel" class="qt-subtitlelabel">Bloret 通行证</div><div id="CardWidget_6" class="qt-cardwidget"><div class="qt-layout horizontalLayout_3" style="display: flex; flex-direction: row; gap: 8px; align-items: center;"><div class="qt-layout verticalLayout_4" style="display: flex; flex-direction: column; gap: 8px;"><div id="Bloret_PassPort_UserName" class="qt-strongbodylabel">未登录</div></div><div id="Bloret_PassPort_login" class="qt-pushbutton">重新登录</div><div id="Bloret_PassPort_logout" class="qt-pushbutton">退出登录</div></div></div><div id="CardWidget" class="qt-cardwidget"><div class="qt-layout horizontalLayout_4" style="display: flex; flex-direction: row; gap: 8px; align-items: center;"><div id="Bloret_PassPort_Other" class="qt-strongbodylabel">其他操作</div><div id="Bloret_PassPort_view_BBBS" class="qt-pushbutton">访问 Bloret BBS</div><div id="reg_Bloret_PassPort" class="qt-pushbutton">注册 Bloret 通行证</div></div></div><div id="CaptionLabel_5" class="qt-captionlabel">使用 Bloret 通行证，可享受几乎所有的 Bloret 服务。</div></div></div></div></div></div>
+    </div>
+</body>
+</html>
