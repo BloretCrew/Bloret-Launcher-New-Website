@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { HashRouter, Routes, Route } from 'react-router-dom'
 import FluentWindow from './components/FluentWindow'
 import Home from './pages/Home'
 import Download from './pages/Download'
@@ -15,7 +15,7 @@ import Info from './pages/Info'
 export default function App() {
   const basename = import.meta.env.DEV ? '/' : '/Bloret-Launcher-New-Website'
   return (
-    <BrowserRouter basename={basename}>
+    <HashRouter>
       <FluentWindow>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -32,6 +32,6 @@ export default function App() {
           <Route path="*" element={<Home />} />
         </Routes>
       </FluentWindow>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
