@@ -13,9 +13,8 @@ import Settings from './pages/Settings'
 import Info from './pages/Info'
 
 export default function App() {
-  const basename = import.meta.env.DEV ? '/' : '/Bloret-Launcher-New-Website'
   return (
-    <BrowserRouter basename={basename}>
+    <BrowserRouter>
       <FluentWindow>
         <Routes>
           <Route path="/" element={<Home />} />

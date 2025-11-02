@@ -1,3 +1,6 @@
+// Backup of App.tsx created before cleanup
+// If you need to restore the previous merged content, rename this file to App.tsx
+
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import FluentWindow from './components/FluentWindow'
@@ -12,14 +15,12 @@ import Passport from './pages/Passport'
 import Settings from './pages/Settings'
 import Info from './pages/Info'
 
-export default function App() {
-  const basename = import.meta.env.DEV ? '/' : '/Bloret-Launcher-New-Website'
+export default function AppBackup() {
   return (
-    <BrowserRouter basename={basename}>
+    <BrowserRouter>
       <FluentWindow>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
           <Route path="/download" element={<Download />} />
           <Route path="/tools" element={<Tools />} />
           <Route path="/version" element={<Version />} />
