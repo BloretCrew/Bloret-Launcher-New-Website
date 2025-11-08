@@ -19,7 +19,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => {
   res.render('index', {
     title: 'Bloret Launcher - AI 驱动的 Minecraft 启动器',
-    titles: config.titles
+    titles: config.titles,
+    BLLatest: config.BLLatest
   });
 });
 
@@ -49,5 +50,10 @@ app.get('/Windows11.png', (req, res) => {
 
 app.get('/BLlight.png', (req, res) => {
   const filePath = path.join(__dirname, 'BLlight.png');
+  res.sendFile(filePath);
+});
+
+app.get('/BL.png', (req, res) => {
+  const filePath = path.join(__dirname, 'BL.png');
   res.sendFile(filePath);
 });

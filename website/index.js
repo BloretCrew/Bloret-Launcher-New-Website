@@ -72,7 +72,8 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     
     // Windows 下载按钮
-    const winButton = document.createElement('button');
+    const winButton = document.createElement('a');
+    winButton.href = `https://gitcode.com/Bloret/Bloret-Launcher/releases/download/${config.BLLatest}/Bloret-Launcher-Setup.exe`;
     winButton.type = 'button';
     winButton.className = 'link-button dlink';
     winButton.dataset.os = 'win';
@@ -89,6 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
         font-size: 16px;
         cursor: pointer;
         transition: background 0.2s;
+        text-decoration: none;
     `;
     winButton.innerHTML = `
         <svg viewBox="0 0 88 88" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
@@ -166,9 +168,9 @@ document.addEventListener('DOMContentLoaded', function() {
         font-size: 14px;
     `;
     otherPlatforms.innerHTML = `
-        <a href="https://vscode.dev/" target="_blank" rel="noopener">Web</a>, 
-        <a href="/insiders" id="download-buttons-insiders">Insiders edition</a>, 
-        or <a href="/Download">other platforms</a>
+        <a href="http://pcfs.top:2" target="_blank" rel="noopener">以前的网站</a>, 
+        <a href="https://github.com/BloretCrew/Bloret-Launcher" id="download-buttons-insiders">Github</a>, 
+        or <a href="http://pcfs.top:2/download.html">其他版本下载</a>
     `;
     
     // 条款文本
