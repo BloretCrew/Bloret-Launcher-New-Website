@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .hero-content {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #333;
+            line-height: 1.2;
+            height: 1.2em;
+        }
+        
+        /* 添加标题轮播样式 */
+        .title-carousel {
+            position: relative;
+            height: 1.2em;
+            overflow: hidden;
+        }
+        
+        .title-item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        
+        .title-item.active {
+            opacity: 1;
+        }
+        
+        .download-content-wrapper {
+            margin: 40px 0;
+        }
+        
+        #download-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .link-button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            background: #007acc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-decoration: none;
+        }
+        
+        .link-button:hover {
+            background: #005a9e !important;
+        }
+        
+        .linux {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .hero-alt-download-links {
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        
+        .terms {
+            font-size: 12px;
+            color: #666;
+            margin-top: 20px;
+        }
+        
+        a {
+            color: #007acc;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .hero-graphic-container {
+            background: linear-gradient(180deg, #f5f5f5 0%, #e0e0e0 100%);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 40px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .editor-container {
+            background: #1e1e1e;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .top-bar {
+            background: #333;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            justify-content: space-between;
+        }
+        
+        .window-controls {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .window-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .close {
+            background: #ff5f56;
+        }
+        
+        .minimize {
+            background: #ffbd2e;
+        }
+        
+        .maximize {
+            background: #27c93f;
+        }
+        
+        .settings-icon {
+            color: #ccc;
+            cursor: pointer;
+        }
+        
+        .editor-main {
+            display: flex;
+            height: 400px;
+        }
+        
+        .side-bar {
+            width: 200px;
+            background: #333;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .activity-bar {
+            width: 48px;
+            background: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 0;
+            gap: 20px;
+        }
+        
+        .activity-icon {
+            color: #ccc;
+            cursor: pointer;
+            padding: 8px;
+        }
+        
+        .side-bar-view {
+            flex: 1;
+            padding: 10px;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .editor-area {
+            flex: 1;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            padding: 20px;
+            overflow: auto;
+            position: relative;
+        }
+        
+        .code-content {
+            margin: 0;
+            line-height: 1.5;
+        }
+        
+        .line-numbers {
+            position: absolute;
+            left: 0;
+            top: 20px;
+            bottom: 20px;
+            width: 40px;
+            text-align: right;
+            color: #858585;
+            padding-right: 10px;
+            border-right: 1px solid #3c3c3c;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <section class="hero-content">
+            <h1>
+                <div class="title-carousel">
+                    <% titles.forEach((title, index) => { %>
+                        <div class="title-item <%= index === 0 ? 'active' : '' %>"><%= title %></div>
+                    <% }); %>
+                </div>
+            </h1>
+            
+            <div class="download-content-wrapper">
+                <div id="download-buttons" class="download-hero alt-downloads">
+                    <button type="button" class="link-button dlink" data-os="win" id="download-buttons-win">
+                        <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
+                        Download for Windows
+                    </button>
+                </div>
+                
+                <p id="download-matrix-label" class="hero-alt-download-links">
+                    <a href="https://vscode.dev/" target="_blank" rel="noopener">Web</a>, 
+                    <a href="/insiders" id="download-buttons-insiders">Insiders edition</a>, 
+                    <a href="/Download">other platforms</a>
+                </p>
+                
+                <p class="terms">
+                    By using VS Code, you agree to its 
+                    <a href="https://code.visualstudio.com/license" target="_blank" rel="noopener">license</a> and 
+                    <a href="https://go.microsoft.com/fwlink/?LinkId=521839" target="_blank" rel="noopener">privacy statement</a>.
+                </p>
+            </div>
+        </section>
+        
+        <section class="hero-graphic-container swimlane-graphic">
+            <div class="editor-container">
+                <img src="../BLlight.png" alt="Bloret Launcher" style="width: 75%; height: auto; display: block; margin: 0 auto;" />
+            </div>
+        </section>
+    </div>
+    
+    <script>
+        // 标题轮播功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const titleItems = document.querySelectorAll('.title-item');
+            let currentIndex = 0;
+            
+            // 每5秒切换一次标题
+            setInterval(() => {
+                // 淡出当前标题
+                titleItems[currentIndex].classList.remove('active');
+                
+                // 计算下一个标题索引
+                currentIndex = (currentIndex + 1) % titleItems.length;
+                
+                // 淡入下一个标题
+                titleItems[currentIndex].classList.add('active');
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
