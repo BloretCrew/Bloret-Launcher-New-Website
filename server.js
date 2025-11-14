@@ -57,3 +57,8 @@ app.get('/BL.png', (req, res) => {
   const filePath = path.join(__dirname, 'BL.png');
   res.sendFile(filePath);
 });
+
+app.get('/BingSiteAuth.xml', (req, res) => {
+  const filePath = path.join(__dirname, 'BingSiteAuth.xml');
+  res.sendFile(filePath);
+});
