@@ -57,12 +57,3 @@ app.get('/BL.png', (req, res) => {
   const filePath = path.join(__dirname, 'BL.png');
   res.sendFile(filePath);
 });
-
-app.get('/BingSiteAuth.xml', (req, res) => {
-  const filePath = path.join(__dirname, 'BingSiteAuth.xml');
-  res.sendFile(filePath);
-});
-app.get('/googlea04a1b5eeebfbc77.html', (req, res) => {
-  const filePath = path.join(__dirname, 'googlea04a1b5eeebfbc77.html');
-  res.sendFile(filePath);
-});

@@ -11,6 +11,53 @@
             background: white;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             padding-top: 70px; /* 为固定顶栏留出空间 */
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 背景图标容器 */
+        .background-icons {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        /* 移动的图标 */
+        .floating-icon {
+            position: absolute;
+            opacity: 0.1;
+            animation: floatHorizontal 20s linear infinite;
+        }
+
+        /* 图标大小控制 */
+        .floating-icon.small {
+            width: 30px;
+            height: 30px;
+        }
+
+        .floating-icon.medium {
+            width: 45px;
+            height: 45px;
+        }
+
+        .floating-icon.large {
+            width: 60px;
+            height: 60px;
+        }
+
+        /* 水平移动动画 */
+        @keyframes floatHorizontal {
+            0% {
+                transform: translateX(-100px);
+            }
+            100% {
+                transform: translateX(calc(100vw + 100px));
+            }
         }
 
         /* 顶栏样式 */
@@ -355,9 +402,11 @@
             line-height: 1.5;
         }
     </style>
-    <meta name="google-site-verification" content="XsOrn6fhd2Qn_2Qb2rOe_kB-W504KRVncTWD3fbYSyM" />
 </head>
 <body>
+    <!-- 背景图标 -->
+    <div class="background-icons" id="backgroundIcons"></div>
+    
     <!-- 顶栏导航 -->
     <nav class="navbar">
         <div class="navbar-content">
@@ -437,6 +486,42 @@
                 navbar.style.boxShadow = '0 1.6px 3.6px rgba(0, 0, 0, 0.1), 0 0.3px 0.9px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.05) inset';
             }
         });
+
+        // 背景图标动画
+        function createFloatingIcons() {
+            const iconsContainer = document.getElementById('backgroundIcons');
+            const icons = [
+                '/res/icons/BL.png',
+                '/res/icons/Command_Block.gif',
+                '/res/icons/Grass_Block.png',
+                '/res/icons/bloret.png',
+                '/res/icons/fabric.png',
+                '/res/icons/java.png'
+            ];
+            
+            const iconSizes = ['small', 'medium', 'large'];
+            const numberOfIcons = 15; // 图标数量
+            
+            for (let i = 0; i < numberOfIcons; i++) {
+                const icon = document.createElement('img');
+                icon.src = icons[Math.floor(Math.random() * icons.length)];
+                icon.className = `floating-icon ${iconSizes[Math.floor(Math.random() * iconSizes.length)]}`;
+                
+                // 随机位置
+                const randomTop = Math.random() * 100; // 0-100% 的垂直位置
+                const randomDelay = Math.random() * 20; // 0-20秒的延迟
+                const randomDuration = 15 + Math.random() * 10; // 15-25秒的动画持续时间
+                
+                icon.style.top = `${randomTop}%`;
+                icon.style.animationDelay = `${randomDelay}s`;
+                icon.style.animationDuration = `${randomDuration}s`;
+                
+                iconsContainer.appendChild(icon);
+            }
+        }
+
+        // 页面加载完成后创建背景图标
+        document.addEventListener('DOMContentLoaded', createFloatingIcons);
     </script>
 </body>
 </html>
