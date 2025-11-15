@@ -367,6 +367,66 @@
             background: #555;
         }
         
+        /* 对话框淡入淡出动画 */
+        @keyframes dialogFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        @keyframes dialogFadeOut {
+            from {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: scale(0.9) translateY(-20px);
+            }
+        }
+        
+        /* 对话框显示状态 */
+        fluent-dialog[data-show="true"]::part(control) {
+            animation: dialogFadeIn 0.3s ease-out forwards;
+        }
+        
+        /* 对话框隐藏状态 */
+        fluent-dialog[data-show="false"]::part(control) {
+            animation: dialogFadeOut 0.3s ease-out forwards;
+        }
+        
+        /* 遮罩层淡入淡出 */
+        @keyframes overlayFadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes overlayFadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+        
+        fluent-dialog[data-show="true"] {
+            animation: overlayFadeIn 0.3s ease-out forwards;
+        }
+        
+        fluent-dialog[data-show="false"] {
+            animation: overlayFadeOut 0.3s ease-out forwards;
+        }
+        
         a {
             color: #007acc;
             text-decoration: none;
@@ -539,6 +599,10 @@
                 
                 <p class="terms">
                     当前版本: Bloret Launcher <%= BLLatest %>
+                    <% if (Beta && Beta.enabled) { %>
+                        <br>
+                        当前正在测试: Bloret Launcher <%= BetaVersionName %>
+                    <% } %>
                 </p>
 
                 <p id="download-matrix-label" class="hero-alt-download-links">
@@ -553,7 +617,7 @@
     </div>
     
     <!-- Fluent UI 模态对话框 -->
-    <fluent-dialog id="downloadModal" modal="true" hidden>
+    <fluent-dialog id="downloadModal" modal="true" hidden data-show="false">
         <div style="padding: 32px; min-width: 400px; min-height: 500px;">
             <h2 style="margin-top: 0; margin-bottom: 24px; color: #333; font-size: 28px; font-weight: 600;">选择下载版本</h2>
             <div style="display: flex; flex-direction: column; gap: 20px; max-height: 400px; overflow-y: auto; padding-right: 8px;" class="dialog-content-scroll">
@@ -587,6 +651,7 @@
                     Bloret Launcher <%= BLLatest %> zip For Windows (Github)
                 </a>
 
+<% if (Beta && Beta.enabled) { %>
 
                 <h3 style="margin-top: 20px; margin-bottom: 20px; color: #333;">
                     <img src="../res/flask.svg" alt="Flask" width="20" height="20">
@@ -616,10 +681,11 @@
                     <img src="../res/icons/github-mark-white.png" alt="Windows 11" width="20" height="20">
                     Bloret Launcher <%= BetaVersion %> zip For Windows (Github)
                 </a>
+<% } %>
             </div>
             
             <div style="margin-top: 32px; text-align: right;">
-                <fluent-button style="width: 160px; height: 42px; font-size: 16px;" onclick="document.getElementById('downloadModal').hidden = true">
+                <fluent-button style="width: 160px; height: 42px; font-size: 16px;" onclick="hideDownloadModal()">
                     取消
                 </fluent-button>
             </div>
@@ -725,6 +791,9 @@
         function showDownloadModal(event) {
             event.preventDefault();
             const modal = document.getElementById('downloadModal');
+            
+            // 设置显示状态并移除隐藏属性
+            modal.setAttribute('data-show', 'true');
             modal.hidden = false;
             
             // 聚焦到第一个按钮
@@ -736,10 +805,23 @@
             }, 100);
         }
         
+        // 隐藏下载模态对话框
+        function hideDownloadModal() {
+            const modal = document.getElementById('downloadModal');
+            
+            // 设置隐藏状态
+            modal.setAttribute('data-show', 'false');
+            
+            // 等待动画完成后隐藏
+            setTimeout(() => {
+                modal.hidden = true;
+            }, 300);
+        }
+        
         // 点击模态对话框外部关闭
         document.getElementById('downloadModal').addEventListener('click', function(event) {
             if (event.target === this) {
-                this.hidden = true;
+                hideDownloadModal();
             }
         });
 
@@ -748,7 +830,7 @@
             if (e.key === 'Escape') {
                 const modal = document.getElementById('downloadModal');
                 if (!modal.hidden) {
-                    modal.hidden = true;
+                    hideDownloadModal();
                 }
             }
         });
