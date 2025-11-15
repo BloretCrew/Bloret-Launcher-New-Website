@@ -20,7 +20,8 @@ app.get('/', (req, res) => {
   res.render('index', {
     title: 'Bloret Launcher - AI 驱动的 Minecraft 启动器',
     titles: config.titles,
-    BLLatest: config.BLLatest
+    BLLatest: config.BLLatest,
+    backgroundIcons: config.backgroundIcons || []
   });
 });
 
@@ -56,4 +57,15 @@ app.get('/BLlight.png', (req, res) => {
 app.get('/BL.png', (req, res) => {
   const filePath = path.join(__dirname, 'BL.png');
   res.sendFile(filePath);
+});
+
+// 添加 res/icons 路径的路由
+app.get('/res/icons/:filename', (req, res) => {
+  const filePath = path.join(__dirname, 'res', 'icons', req.params.filename);
+  res.sendFile(filePath);
+});
+
+// 测试背景图标的页面
+app.get('/test-bg', (req, res) => {
+  res.sendFile(path.join(__dirname, 'test-background.html'));
 });

@@ -25,12 +25,13 @@
             pointer-events: none;
             z-index: -1;
             overflow: hidden;
+            background: transparent;
         }
 
         /* 移动的图标 */
         .floating-icon {
             position: absolute;
-            opacity: 0.1;
+            opacity: 0.3;
             animation: floatHorizontal 20s linear infinite;
         }
 
@@ -50,13 +51,13 @@
             height: 60px;
         }
 
-        /* 水平移动动画 */
+        /* 水平移动动画 - 从左向右移动 */
         @keyframes floatHorizontal {
             0% {
-                transform: translateX(-100px);
+                transform: translateX(-20vw);
             }
             100% {
-                transform: translateX(calc(100vw + 100px));
+                transform: translateX(calc(100vw + 50vw));
             }
         }
 
@@ -487,37 +488,65 @@
             }
         });
 
-        // 背景图标动画
+        // 背景图标动画 - 分批创建以避免初始堆积
         function createFloatingIcons() {
             const iconsContainer = document.getElementById('backgroundIcons');
-            const icons = [
-                '/res/icons/BL.png',
-                '/res/icons/Command_Block.gif',
-                '/res/icons/Grass_Block.png',
-                '/res/icons/bloret.png',
-                '/res/icons/fabric.png',
-                '/res/icons/java.png'
-            ];
+            console.log('创建背景图标，容器:', iconsContainer);
+            
+            // 从模板获取图标列表
+            const icons = <%- JSON.stringify(backgroundIcons) %>;
+            console.log('从配置获取到图标列表:', icons);
+            
+            if (!icons || icons.length === 0) {
+                console.warn('没有可用的图标，背景动画将不会显示');
+                return;
+            }
             
             const iconSizes = ['small', 'medium', 'large'];
-            const numberOfIcons = 15; // 图标数量
+            const numberOfIcons = 25; // 图标数量
             
-            for (let i = 0; i < numberOfIcons; i++) {
-                const icon = document.createElement('img');
-                icon.src = icons[Math.floor(Math.random() * icons.length)];
-                icon.className = `floating-icon ${iconSizes[Math.floor(Math.random() * iconSizes.length)]}`;
-                
-                // 随机位置
-                const randomTop = Math.random() * 100; // 0-100% 的垂直位置
-                const randomDelay = Math.random() * 20; // 0-20秒的延迟
-                const randomDuration = 15 + Math.random() * 10; // 15-25秒的动画持续时间
-                
-                icon.style.top = `${randomTop}%`;
-                icon.style.animationDelay = `${randomDelay}s`;
-                icon.style.animationDuration = `${randomDuration}s`;
-                
-                iconsContainer.appendChild(icon);
+            // 分批创建图标，避免初始堆积
+            function createIconBatch(startIndex, batchSize) {
+                for (let i = startIndex; i < Math.min(startIndex + batchSize, numberOfIcons); i++) {
+                    const icon = document.createElement('img');
+                    const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+                    const randomSize = iconSizes[Math.floor(Math.random() * iconSizes.length)];
+                    
+                    icon.src = randomIcon;
+                    icon.className = `floating-icon ${randomSize}`;
+                    icon.style.position = 'absolute';
+                    
+                    // 随机垂直位置
+                    const randomTop = Math.random() * 100; // 0-100% 的垂直位置
+                    // 让图标从屏幕左侧外开始，从更远处进入
+                    const randomLeft = -20 - Math.random() * 30; // -20到-50% 的水平位置（屏幕左侧更远处）
+                    const randomDelay = Math.random() * 3; // 0-3秒的延迟，减少初始延迟
+                    const randomDuration = 10 + Math.random() * 8; // 10-18秒的动画持续时间
+                    
+                    icon.style.top = `${randomTop}%`;
+                    icon.style.left = `${randomLeft}%`; // 初始位置在屏幕右侧外
+                    icon.style.animationDelay = `${randomDelay}s`;
+                    icon.style.animationDuration = `${randomDuration}s`;
+                    
+                    iconsContainer.appendChild(icon);
+                    console.log(`创建图标 ${i+1}: ${randomIcon}, 大小: ${randomSize}, 位置: ${randomTop}%`);
+                }
             }
+            
+            // 立即创建第一批图标（5个）
+            createIconBatch(0, 5);
+            
+            // 分批创建剩余的图标
+            let currentIndex = 5;
+            const batchInterval = setInterval(() => {
+                createIconBatch(currentIndex, 3);
+                currentIndex += 3;
+                
+                if (currentIndex >= numberOfIcons) {
+                    clearInterval(batchInterval);
+                    console.log(`总共创建了 ${numberOfIcons} 个背景图标`);
+                }
+            }, 1000); // 每1秒创建一批
         }
 
         // 页面加载完成后创建背景图标
