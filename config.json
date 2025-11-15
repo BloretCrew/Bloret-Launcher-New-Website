@@ -4,9 +4,9 @@
   "Description": "Conveniently manage your Minecraft, conveniently play Bloret. 便捷地管理你的 Minecraft，便捷地游玩 Bloret。",
   "BLNewVersionDescription": "我们迫不及待让你体验到新功能！欢迎体验 BL 8.1\n\n有什么新东西吗？\n\nNuitka 打包\nBloret Launcher 运行速度将会得到极大的提升\n\nBloriko 询问功能\nBloret 服务器信息查询功能\n以上两项新功能是 Bloret Launcher 对 Bloret 服务器融合的巨大进步！欢迎体验反馈！",
   "Beta":{
-    "enabled": false,
-    "version": "8.2b1",
-    "versionName": "8.2 Beta 1",
+    "enabled": true,
+    "version": "8.2-b3-2",
+    "versionName": "8.2 Beta 3",
     "description": "欢迎体验 Bloret Launcher 8.2 测试版！"
   },
   "titles": [
@@ -24,8 +24,6 @@
     "/res/icons/bloret.png",
     "/res/icons/fabric.png",
     "/res/icons/java.png",
-    "/res/icons/modrinth.svg",
-    "/res/icons/github-mark-white.png",
-    "/res/icons/Git-Icon-White.png"
+    "/res/icons/modrinth.svg"
   ]
 }
