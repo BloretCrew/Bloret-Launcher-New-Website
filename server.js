@@ -16,6 +16,9 @@ app.set('views', path.join(__dirname, 'views'));
 // 设置静态文件目录
 app.use(express.static(path.join(__dirname, 'public')));
 
+// 开放整个 res 文件夹到 /res 路径
+app.use('/res', express.static(path.join(__dirname, 'res')));
+
 // 路由
 app.get('/', (req, res) => {
   res.render('index', {
@@ -24,6 +27,9 @@ app.get('/', (req, res) => {
     BLLatest: config.BLLatest,
     BLNewVersionDescription: config.BLNewVersionDescription,
     Description: config.Description,
+    BetaVersion: config.Beta.version,
+    BetaVersionName: config.Beta.versionName,
+    BetaDescription: config.Beta.description,
     backgroundIcons: config.backgroundIcons || []
   });
 });
@@ -62,11 +68,6 @@ app.get('/BL.png', (req, res) => {
   res.sendFile(filePath);
 });
 
-// 添加 res/icons 路径的路由
-app.get('/res/icons/:filename', (req, res) => {
-  const filePath = path.join(__dirname, 'res', 'icons', req.params.filename);
-  res.sendFile(filePath);
-});
 
 // 测试背景图标的页面
 app.get('/test-bg', (req, res) => {

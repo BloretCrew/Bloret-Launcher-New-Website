@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
     <link rel="icon" href="res/icons/BL.png" type="image/png">
+    <script type="module" src="https://unpkg.com/@fluentui/web-components"></script>
     <style>
         body {
             margin: 0;
@@ -275,6 +276,97 @@
             margin-top: 20px;
         }
         
+        /* Fluent UI 模态对话框样式优化 */
+        fluent-dialog {
+            --dialog-border-radius: 12px;
+            --dialog-padding: 0;
+            --dialog-width: 90vw;
+            --dialog-max-width: 700px;
+            --dialog-min-height: 700px;
+        }
+        
+        fluent-dialog::part(control) {
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            min-height: 600px;
+            width: 90vw;
+            max-width: 700px;
+        }
+        
+        fluent-button {
+            --button-border-radius: 8px;
+            transition: all 0.2s ease;
+            min-height: 48px;
+        }
+        
+        fluent-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            fluent-dialog::part(control) {
+                width: 95vw;
+                max-width: none;
+                margin: 10px;
+            }
+            
+            fluent-button {
+                min-height: 52px;
+                font-size: 16px; /* 防止iOS缩放 */
+            }
+        }
+        
+        /* 按钮内容布局优化 */
+        fluent-button > div {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+            gap: 12px;
+        }
+        
+        /* 图标样式 */
+        fluent-button span[slot="start"] {
+            font-size: 20px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+        
+        /* 文件扩展名标签 */
+        fluent-button span[slot="end"] {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+        
+        /* 对话框内容区域滚动条样式 */
+        .dialog-content-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: #888 #f1f1f1;
+        }
+        
+        .dialog-content-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .dialog-content-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+        
+        .dialog-content-scroll::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+        
+        .dialog-content-scroll::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
         a {
             color: #007acc;
             text-decoration: none;
@@ -415,8 +507,8 @@
             <img src="/BL.png" alt="Bloret Launcher" class="navbar-logo">
             <h1 class="navbar-title">Bloret Launcher</h1>
             <div style="margin: 0 5px;"></div>
-            <a href="http://pcfs.top:20000"> PassPort </a>
-            <a href="http://pcfs.top:20901"> ChaFuWang </a>
+            <a href="https://passport.bloret.net/"> PassPort </a>
+            <a href="http://pcfs.top:20901/"> ChaFuWang </a>
             <!-- <a href="https://github.com/BloretCrew/Bloret-Launcher"> Github </a> -->
         </div>
     </nav>
@@ -440,6 +532,9 @@
                         <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
                         下载 Windows 版本
                     </a>
+                    <a href="#" class="link-button dlink" data-os="other" id="download-buttons-other" onclick="showDownloadModal(event)">
+                        <img src="/res/square.and.arrow.down.on.square.svg" alt="其他版本" width="20" height="20">
+                    </a>
                 </div>
                 
                 <p class="terms">
@@ -456,6 +551,80 @@
         
         <img src="../BLlight.png" alt="Bloret Launcher" style="width: 75%; height: auto; display: block; margin: 0 auto;" />
     </div>
+    
+    <!-- Fluent UI 模态对话框 -->
+    <fluent-dialog id="downloadModal" modal="true" hidden>
+        <div style="padding: 32px; min-width: 400px; min-height: 500px;">
+            <h2 style="margin-top: 0; margin-bottom: 24px; color: #333; font-size: 28px; font-weight: 600;">选择下载版本</h2>
+            <div style="display: flex; flex-direction: column; gap: 20px; max-height: 400px; overflow-y: auto; padding-right: 8px;" class="dialog-content-scroll">
+
+                <h3 style="margin-top: 20px; margin-bottom: 20px; color: #333;">
+                    <img src="../res/checkmark.seal.svg" alt="Flask" width="20" height="20">
+                    Bloret Launcher <%= BetaVersion %>
+                </h3>
+                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-Setup.exe" class="link-button dlink" data-os="win" id="download-buttons-win">
+                    <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
+                    <img src="../res/arrow.down.app.dashed.svg" alt="Windows 11" width="20" height="20">
+                    <img src="../res/GitCode.png" alt="Windows 11" width="20" height="20">
+                    Bloret Launcher <%= BLLatest %> Setup For Windows (GitCode)
+                </a>
+                <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/latest/download/Bloret-Launcher-Setup.exe" class="link-button dlink" data-os="win" id="download-buttons-win">
+                    <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
+                    <img src="../res/arrow.down.app.dashed.svg" alt="Windows 11" width="20" height="20">
+                    <img src="../res/icons/github-mark-white.png" alt="Windows 11" width="20" height="20">
+                    Bloret Launcher <%= BLLatest %> Setup For Windows (Github)
+                </a>
+                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-Windows.zip" class="link-button dlink" data-os="win" id="download-buttons-win">
+                    <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
+                    <img src="../res/shippingbox.svg" alt="Windows 11" width="20" height="20">
+                    <img src="../res/GitCode.png" alt="Windows 11" width="20" height="20">
+                    Bloret Launcher <%= BLLatest %> zip For Windows (GitCode)
+                </a>
+                <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/latest/download/Bloret-Launcher-Windows.zip" class="link-button dlink" data-os="win" id="download-buttons-win">
+                    <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
+                    <img src="../res/shippingbox.svg" alt="Windows 11" width="20" height="20">
+                    <img src="../res/icons/github-mark-white.png" alt="Windows 11" width="20" height="20">
+                    Bloret Launcher <%= BLLatest %> zip For Windows (Github)
+                </a>
+
+
+                <h3 style="margin-top: 20px; margin-bottom: 20px; color: #333;">
+                    <img src="../res/flask.svg" alt="Flask" width="20" height="20">
+                    Bloret Launcher <%= BetaVersionName %>
+                </h3>
+                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BetaVersion %>/Bloret-Launcher-Setup.exe" class="link-button dlink" data-os="win" id="download-buttons-win">
+                    <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
+                    <img src="../res/arrow.down.app.dashed.svg" alt="Windows 11" width="20" height="20">
+                    <img src="../res/GitCode.png" alt="Windows 11" width="20" height="20">
+                    Bloret Launcher <%= BetaVersion %> Setup For Windows (GitCode)
+                </a>
+                <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/latest/download/Bloret-Launcher-Setup.exe" class="link-button dlink" data-os="win" id="download-buttons-win">
+                    <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
+                    <img src="../res/arrow.down.app.dashed.svg" alt="Windows 11" width="20" height="20">
+                    <img src="../res/icons/github-mark-white.png" alt="Windows 11" width="20" height="20">
+                    Bloret Launcher <%= BetaVersion %> Setup For Windows (Github)
+                </a>
+                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BetaVersion %>/Bloret-Launcher-Windows.zip" class="link-button dlink" data-os="win" id="download-buttons-win">
+                    <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
+                    <img src="../res/shippingbox.svg" alt="Windows 11" width="20" height="20">
+                    <img src="../res/GitCode.png" alt="Windows 11" width="20" height="20">
+                    Bloret Launcher <%= BetaVersion %> zip For Windows (GitCode)
+                </a>
+                <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/latest/download/Bloret-Launcher-Windows.zip" class="link-button dlink" data-os="win" id="download-buttons-win">
+                    <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
+                    <img src="../res/shippingbox.svg" alt="Windows 11" width="20" height="20">
+                    <img src="../res/icons/github-mark-white.png" alt="Windows 11" width="20" height="20">
+                    Bloret Launcher <%= BetaVersion %> zip For Windows (Github)
+                </a>
+            </div>
+            
+            <div style="margin-top: 32px; text-align: right;">
+                <fluent-button style="width: 160px; height: 42px; font-size: 16px;" onclick="document.getElementById('downloadModal').hidden = true">
+                    取消
+                </fluent-button>
+            </div>
+        </div>
+    </fluent-dialog>
     
     <script>
         // 标题轮播功能
@@ -551,6 +720,43 @@
 
         // 页面加载完成后创建背景图标
         document.addEventListener('DOMContentLoaded', createFloatingIcons);
+        
+        // 显示下载模态对话框
+        function showDownloadModal(event) {
+            event.preventDefault();
+            const modal = document.getElementById('downloadModal');
+            modal.hidden = false;
+            
+            // 聚焦到第一个按钮
+            setTimeout(() => {
+                const firstButton = modal.querySelector('fluent-button');
+                if (firstButton) {
+                    firstButton.focus();
+                }
+            }, 100);
+        }
+        
+        // 点击模态对话框外部关闭
+        document.getElementById('downloadModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                this.hidden = true;
+            }
+        });
+
+        // 键盘支持 - ESC键关闭模态框
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('downloadModal');
+                if (!modal.hidden) {
+                    modal.hidden = true;
+                }
+            }
+        });
+
+        // 防止模态框内容点击事件冒泡
+        document.querySelector('#downloadModal > div').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
     </script>
 </body>
 </html>
