@@ -21,6 +21,8 @@ app.get('/', (req, res) => {
     title: 'Bloret Launcher - AI 驱动的 Minecraft 启动器',
     titles: config.titles,
     BLLatest: config.BLLatest,
+    BLNewVersionDescription: config.BLNewVersionDescription,
+    Description: config.Description,
     backgroundIcons: config.backgroundIcons || []
   });
 });
