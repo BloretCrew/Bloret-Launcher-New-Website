@@ -6,6 +6,18 @@ const favicon = require('serve-favicon');
 const app = express();
 const port = 3001; // 更改端口以避免冲突
 
+// 用户访问记录中间件
+app.use((req, res, next) => {
+  const timestamp = new Date().toLocaleString('zh-CN');
+  const ip = req.ip || req.connection.remoteAddress;
+  const method = req.method;
+  const url = req.originalUrl;
+  const userAgent = req.get('User-Agent') || 'Unknown';
+  
+  console.log(`[${timestamp}] ${ip} ${method} ${url} - ${userAgent}`);
+  next();
+});
+
 // 读取配置文件
 function readConfig(){
   return JSON.parse(fs.readFileSync(path.join(__dirname, 'config.json'), 'utf8'));
@@ -82,67 +94,67 @@ app.get('/test-bg', (req, res) => {
 });
 
 // 新版本发布API
-app.post('/api/newversion/github', (req, res) => {
-  try {
-    const { key, beta, version, versionName, description } = req.body;
+// app.post('/api/newversion/github', (req, res) => {
+//   try {
+//     const { key, beta, version, versionName, description } = req.body;
     
-    // 验证请求密钥
-    const config = readConfig();
-    if (key !== config.github_key) {
-      return res.status(401).json({ 
-        success: false, 
-        error: 'Invalid key' 
-      });
-    }
+//     // 验证请求密钥
+//     const config = readConfig();
+//     if (key !== config.github_key) {
+//       return res.status(401).json({ 
+//         success: false, 
+//         error: 'Invalid key' 
+//       });
+//     }
     
-    // 验证必填字段
-    if (!version || !versionName || !description) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'Missing required fields: version, versionName, description' 
-      });
-    }
+//     // 验证必填字段
+//     if (!version || !versionName || !description) {
+//       return res.status(400).json({ 
+//         success: false, 
+//         error: 'Missing required fields: version, versionName, description' 
+//       });
+//     }
     
-    // 更新配置
-    if (beta) {
-      // 更新测试版配置
-      config.Beta = {
-        enabled: true,
-        version: version,
-        versionName: versionName,
-        description: description
-      };
-    } else {
-      // 更新正式版配置
-      config.BLLatest = version;
-      config.BLNewVersionDescription = description;
-      // 如果有正式版发布，可以选择禁用测试版
-      // config.Beta.enabled = false;
-    }
+//     // 更新配置
+//     if (beta) {
+//       // 更新测试版配置
+//       config.Beta = {
+//         enabled: true,
+//         version: version,
+//         versionName: versionName,
+//         description: description
+//       };
+//     } else {
+//       // 更新正式版配置
+//       config.BLLatest = version;
+//       config.BLNewVersionDescription = description;
+//       // 如果有正式版发布，可以选择禁用测试版
+//       // config.Beta.enabled = false;
+//     }
     
-    // 保存配置到文件
-    fs.writeFileSync(
-      path.join(__dirname, 'config.json'), 
-      JSON.stringify(config, null, 2),
-      'utf8'
-    );
+//     // 保存配置到文件
+//     fs.writeFileSync(
+//       path.join(__dirname, 'config.json'), 
+//       JSON.stringify(config, null, 2),
+//       'utf8'
+//     );
     
-    res.json({ 
-      success: true, 
-      message: beta ? 'Beta version updated successfully' : 'Stable version updated successfully',
-      data: {
-        beta: beta,
-        version: version,
-        versionName: versionName,
-        description: description
-      }
-    });
+//     res.json({ 
+//       success: true, 
+//       message: beta ? 'Beta version updated successfully' : 'Stable version updated successfully',
+//       data: {
+//         beta: beta,
+//         version: version,
+//         versionName: versionName,
+//         description: description
+//       }
+//     });
     
-  } catch (error) {
-    console.error('Error updating version:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: 'Internal server error' 
-    });
-  }
-});
+//   } catch (error) {
+//     console.error('Error updating version:', error);
+//     res.status(500).json({ 
+//       success: false, 
+//       error: 'Internal server error' 
+//     });
+//   }
+// });
