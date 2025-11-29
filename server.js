@@ -33,6 +33,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 开放整个 res 文件夹到 /res 路径
 app.use('/res', express.static(path.join(__dirname, 'res')));
 
+// 开放 dbtest 文件夹到 /dbtest 路径
+app.use('/dbtest', express.static(path.join(__dirname, 'dbtest')));
+
 // 解析JSON请求体
 app.use(express.json());
 
