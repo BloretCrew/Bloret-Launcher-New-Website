@@ -96,6 +96,76 @@ app.get('/test-bg', (req, res) => {
   res.sendFile(path.join(__dirname, 'test-background.html'));
 });
 
+// 获取 Bloret Launcher 配置信息的 API
+app.get('/api/info', (req, res) => {
+  try {
+    const config = readConfig();
+    
+    // 构建测试版信息
+    let betaInfo;
+    if (config.Beta.enabled){
+      console.log('Beta version is enabled:', config.Beta.version);
+      betaInfo = {
+        enabled: true,
+        version: config.Beta.version,
+        versionName: config.Beta.versionName,
+        description: config.Beta.description
+      };
+    } else {
+      betaInfo = { enabled: false };
+    }
+
+    // 构建下载地址信息
+    let downloads = {};
+    
+    // 正式版下载地址
+    if (config.BLLatest) {
+      downloads.stable = {
+        gitcode: {
+          exe: `https://gitcode.com/Bloret/Bloret-Launcher/releases/download/${config.BLLatest}/Bloret-Launcher-Setup.exe`,
+          zip: `https://gitcode.com/Bloret/Bloret-Launcher/releases/download/${config.BLLatest}/Bloret-Launcher-Windows.zip`
+        },
+        github: {
+          exe: `https://github.com/BloretCrew/Bloret-Launcher/releases/download/${config.BLLatest}/Bloret-Launcher-Setup.exe`,
+          zip: `https://github.com/BloretCrew/Bloret-Launcher/releases/download/${config.BLLatest}/Bloret-Launcher-Windows.zip`
+        }
+      };
+    }
+    
+    // 测试版下载地址
+    if (config.Beta.enabled && config.Beta.version) {
+      downloads.beta = {
+        gitcode: {
+          exe: `https://gitcode.com/Bloret/Bloret-Launcher/releases/download/${config.Beta.version}/Bloret-Launcher-Setup.exe`,
+          zip: `https://gitcode.com/Bloret/Bloret-Launcher/releases/download/${config.Beta.version}/Bloret-Launcher-Windows.zip`
+        },
+        github: {
+          exe: `https://github.com/BloretCrew/Bloret-Launcher/releases/download/${config.Beta.version}/Bloret-Launcher-Setup.exe`,
+          zip: `https://github.com/BloretCrew/Bloret-Launcher/releases/download/${config.Beta.version}/Bloret-Launcher-Windows.zip`
+        }
+      };
+    }
+
+    const blInfo = {
+      latestVersion: config.BLLatest,
+      description: config.Description,
+      newVersionDescription: config.BLNewVersionDescription,
+      beta: betaInfo,
+      downloads: downloads
+    };
+    
+    res.json(blInfo);
+    
+  } catch (error) {
+    console.error('Error reading config for /api/info:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to read configuration',
+      message: error.message
+    });
+  }
+});
+
 // 新版本发布API
 // app.post('/api/newversion/github', (req, res) => {
 //   try {
