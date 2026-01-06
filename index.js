@@ -425,3 +425,4 @@ function createWindowButton(color) {
     button.style.cssText = 'width: 12px; height: 12px; border-radius: 50%; background: ' + color + '; cursor: pointer;';
     return button;
 }
+
