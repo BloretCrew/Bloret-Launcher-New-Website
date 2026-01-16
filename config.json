@@ -27,5 +27,11 @@
     "/res/icons/java.png",
     "/res/icons/modrinth.svg",
     "/res/icons/Bloriko.jpg"
+  ],
+  "BLTips":[
+    "提示：你可以在设置中启用 Bloret 服务以获得更好的体验！",
+    "提示：Bloret Launcher 现已支持 Modrinth 和 Easyiter！",
+    "提示：遇到问题？请访问我们的 GitHub 讨论区寻求帮助！",
+    "提示：Bloret Launcher 是完全开源的！欢迎访问我们的 GitHub 仓库查看代码！"
   ]
 }

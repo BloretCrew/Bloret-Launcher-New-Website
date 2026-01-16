@@ -154,7 +154,8 @@ app.get('/api/info', (req, res) => {
       description: config.Description,
       newVersionDescription: config.BLNewVersionDescription,
       beta: betaInfo,
-      downloads: downloads
+      downloads: downloads,
+      BLTips: config.BLTips || []
     };
     
     res.json(blInfo);
