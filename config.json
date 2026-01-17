@@ -33,5 +33,14 @@
     "提示：Bloret Launcher 现已支持 Modrinth 和 Easyiter！",
     "提示：遇到问题？请访问我们的 GitHub 讨论区寻求帮助！",
     "提示：Bloret Launcher 是完全开源的！欢迎访问我们的 GitHub 仓库查看代码！"
-  ]
+  ],
+  "activity":{
+    "show": true,
+    "status": "ended",
+    "title": "测试活动",
+    "description": "这是一个测试活动的描述。",
+    "icon": "/res/icons/BL.png",
+    "time": "2024-06-01 到 2024-06-30",
+    "link": "https://launcher.bloret.net/"
+  }
 }
