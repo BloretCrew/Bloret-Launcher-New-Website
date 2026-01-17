@@ -29,14 +29,17 @@
     "/res/icons/Bloriko.jpg"
   ],
   "BLTips":[
-    "提示：你可以在设置中启用 Bloret 服务以获得更好的体验！",
-    "提示：Bloret Launcher 现已支持 Modrinth 和 Easyiter！",
-    "提示：遇到问题？请访问我们的 GitHub 讨论区寻求帮助！",
-    "提示：Bloret Launcher 是完全开源的！欢迎访问我们的 GitHub 仓库查看代码！"
+    "是免费开源的 Minecraft 启动器",
+    "专为 Bloret 玩家打造",
+    "由 AI 驱动的 Minecraft 启动器",
+    "是受 Bloret 支持的 Minecraft 启动器",
+    "最贴近 Windows 11 设计的 Minecraft 启动器",
+    "集成 Modrinth、Easyiter 以及 Bloret 服务",
+    "现代化的 Minecraft 启动器"
   ],
   "activity":{
     "show": true,
-    "status": "ended",
+    "status": "ongoing",
     "title": "测试活动",
     "description": "这是一个测试活动的描述。",
     "icon": "https://cdn-img.gitcode.com/ba/af/b79aa714fb142684eca897a62bdeaf5320042d3de8dfd95e11fd8e4ddaeb0f16.png",
