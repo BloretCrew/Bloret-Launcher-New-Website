@@ -39,7 +39,7 @@
   ],
   "activity":{
     "show": true,
-    "status": "ongoing",
+    "status": "before",
     "title": "测试活动",
     "description": "这是一个测试活动的描述。",
     "icon": "https://cdn-img.gitcode.com/ba/af/b79aa714fb142684eca897a62bdeaf5320042d3de8dfd95e11fd8e4ddaeb0f16.png",
