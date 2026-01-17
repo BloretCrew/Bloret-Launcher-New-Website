@@ -99,12 +99,6 @@ app.get('/test-bg', (req, res) => {
   res.sendFile(path.join(__dirname, 'test-background.html'));
 });
 
-app.get('/api/activity', (req, res) => {
-  // 返回 config.json 中的 activity 字段
-  const config = readConfig();
-  res.json({ activity: config.activity });
-});
-
 // 获取 Bloret Launcher 配置信息的 API
 app.get('/api/info', (req, res) => {
   try {
@@ -161,7 +155,8 @@ app.get('/api/info', (req, res) => {
       newVersionDescription: config.BLNewVersionDescription,
       beta: betaInfo,
       downloads: downloads,
-      BLTips: config.BLTips || []
+      BLTips: config.BLTips || [],
+      activity: config.activity
     };
     
     res.json(blInfo);
