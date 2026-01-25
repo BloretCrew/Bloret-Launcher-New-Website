@@ -58,6 +58,9 @@ app.get('/', (req, res) => {
     backgroundIcons: config.backgroundIcons || []
   });
 });
+app.get('/spr_activity', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'spr_activity.html'));
+});
 
 // 启动服务器
 const server = app.listen(port, () => {

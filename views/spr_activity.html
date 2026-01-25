@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>红石工坊 · 新春烟花师</title>
+    <style>
+        :root {
+            --mc-bg: #C6C6C6;
+            --mc-dark: #373737;
+            --mc-light: #FFFFFF;
+            --mc-slot: #8B8B8B;
+            --festival-red: #D32F2F;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            /* 修改要求 1: 全部字体使用微软雅黑 */
+            font-family: "Microsoft YaHei", "Heiti SC", sans-serif; 
+            font-weight: bold;
+            color: white;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #game-container {
+            width: 100%;
+            max-width: 480px;
+            height: 100%;
+            max-height: 850px;
+            background: url('/res/spr/bg_village_night.jpg') no-repeat center center;
+            background-size: cover;
+            position: relative;
+            overflow: hidden;
+            border: 4px solid var(--mc-bg);
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        /* 通用 UI 组件 */
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .active { display: flex; }
+
+        .mc-btn {
+            background-color: var(--mc-bg);
+            border-top: 4px solid var(--mc-light);
+            border-left: 4px solid var(--mc-light);
+            border-right: 4px solid var(--mc-dark);
+            border-bottom: 4px solid var(--mc-dark);
+            color: #222;
+            padding: 15px 20px;
+            font-family: inherit;
+            font-size: 16px; /* 字体改动后稍微调大字号 */
+            cursor: pointer;
+            margin-top: 20px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+        }
+        .mc-btn:active {
+            border-top: 4px solid var(--mc-dark);
+            border-left: 4px solid var(--mc-dark);
+            border-right: 4px solid var(--mc-light);
+            border-bottom: 4px solid var(--mc-light);
+        }
+
+        .dialog-box {
+            background: rgba(0,0,0,0.7);
+            border: 2px solid var(--festival-red);
+            padding: 20px;
+            margin: 20px;
+            line-height: 1.6;
+            font-size: 14px;
+            border-radius: 8px; /* 微软雅黑风格下可以稍微圆润一点 */
+        }
+
+        /* 阶段 2: 收集 */
+        #collect-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 5;
+        }
+        #timer {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: var(--festival-red);
+            font-size: 24px;
+            z-index: 6;
+            text-shadow: 2px 2px 0 #fff;
+        }
+
+        /* 阶段 3: 合成台 */
+        .crafting-ui {
+            background: #C6C6C6;
+            padding: 10px;
+            border: 4px solid #373737;
+            color: #222;
+            width: 90%;
+        }
+
+        .grid-3x3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            margin: 10px auto;
+            width: 160px;
+        }
+
+        .slot {
+            width: 48px;
+            height: 48px;
+            background-color: #8B8B8B;
+            border: 2px solid #373737;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .slot.selected { border-color: var(--festival-red); }
+
+        .inventory {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 15px;
+        }
+
+        .item-icon {
+            width: 32px;
+            height: 32px;
+            display: block;
+        }
+
+        /* 模拟物品图标 CSS */
+        .icon-gunpowder { background: #555; border-radius: 50%; box-shadow: 2px 2px 0 #222; }
+        .icon-paper { background: #fff; border: 1px solid #ccc; transform: rotate(10deg); }
+        .icon-gold { background: #FFD700; border: 2px solid #B8860B; }
+        .icon-enderpearl { background: #008080; border-radius: 50%; box-shadow: inset 2px 2px 5px #fff; }
+        .icon-dye { background: var(--festival-red); border-radius: 50%; }
+        .icon-star { background: #E0FFFF; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+
+        /* 阶段 4: 结果 */
+        #firework-canvas { position: absolute; top:0; left:0; z-index: 1; }
+        .result-card {
+            background: rgba(255, 255, 255, 0.95);
+            color: #000;
+            padding: 25px;
+            border: 4px solid var(--festival-red);
+            z-index: 20;
+            width: 80%;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .chinese-knot { color: var(--festival-red); font-size: 24px; margin-bottom: 10px; }
+        
+        /* 兑换码样式 */
+        .redeem-section {
+            background: #eee;
+            border: 2px dashed #999;
+            padding: 10px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        .redeem-code {
+            font-size: 20px;
+            color: var(--festival-red);
+            font-weight: 900;
+            letter-spacing: 2px;
+            user-select: text; /* 允许用户复制 */
+        }
+        .redeem-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <audio id="audio-explode" src="/res/spr/explode.mp3" preload="auto"></audio>
+    
+    <div id="screen-intro" class="screen active">
+        <div style="font-size:40px; margin-bottom:20px;">🧨</div>
+        <h1>红石工坊</h1>
+        <div class="dialog-box">
+            <p style="color:yellow; font-weight:bold;">村民：</p>
+            <p>“新春到了！我需要你制作最特别的烟花！”</p>
+            <p>“快去收集火药和神秘材料吧！”</p>
+        </div>
+        <button class="mc-btn" onclick="startGame()">接受任务</button>
+    </div>
+
+    <div id="screen-collect" class="screen">
+        <div id="timer">10</div>
+        <canvas id="collect-canvas"></canvas>
+        <div class="dialog-box" style="position: absolute; bottom: 20px;">
+            <p>点击掉落的方块收集材料！</p>
+        </div>
+    </div>
+
+    <div id="screen-craft" class="screen">
+        <h3 style="margin-top: 10px; color:#333;">合成烟花</h3>
+        <div class="crafting-ui">
+            <div style="text-align: left; font-size: 12px; margin-bottom: 5px;">合成区 (3x3)</div>
+            <div class="grid-3x3" id="craft-grid">
+                <div class="slot" data-index="0" onclick="placeItem(0)"></div>
+                <div class="slot" data-index="1" onclick="placeItem(1)"></div>
+                <div class="slot" data-index="2" onclick="placeItem(2)"></div>
+                <div class="slot" data-index="3" onclick="placeItem(3)"></div>
+                <div class="slot" data-index="4" onclick="placeItem(4)"></div>
+                <div class="slot" data-index="5" onclick="placeItem(5)"></div>
+                <div class="slot" data-index="6" onclick="placeItem(6)"></div>
+                <div class="slot" data-index="7" onclick="placeItem(7)"></div>
+                <div class="slot" data-index="8" onclick="placeItem(8)"></div>
+            </div>
+            
+            <div style="text-align: left; font-size: 12px; margin: 10px 0 5px;">背包 (点击选中)</div>
+            <div class="inventory" id="inventory-display">
+                </div>
+            
+            <button class="mc-btn" style="width:100%" onclick="craftFireworks()">合成 !</button>
+            <button class="mc-btn" style="width:100%; margin-top:5px; font-size:12px" onclick="clearGrid()">清空</button>
+        </div>
+    </div>
+
+    <div id="screen-result" class="screen">
+        <canvas id="firework-canvas"></canvas>
+        <div class="result-card" id="result-text" style="display:none;">
+            <div class="chinese-knot">♦ 恭喜发财 ♦</div>
+            <h2 id="firework-name">普通烟花</h2>
+            <p id="blessing-text">爆竹声中一岁除</p>
+            
+            <div class="redeem-section">
+                <div class="redeem-label">您的新春礼包兑换码</div>
+                <div id="redeem-code-display" class="redeem-code">LOADING...</div>
+            </div>
+
+            <hr style="border:1px dashed #ccc; margin: 15px 0;">
+            <p style="font-size:12px; color:#555;">2026 运势关键词</p>
+            <h3 id="fortune-word" style="color:var(--festival-red); font-size:24px;">红石大拿</h3>
+            <button class="mc-btn" onclick="location.reload()">再玩一次</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- 游戏数据 ---
+    // 使用 /res/spr/ 目录下的真实像素图片资源
+    const items = [
+        { id: 'gunpowder', name: '火药', class: 'icon-gunpowder', color: '#555', img: '/res/spr/gunpowder.png' },
+        { id: 'paper', name: '纸', class: 'icon-paper', color: '#fff', img: '/res/spr/paper.png' },
+        { id: 'gold', name: '金锭', class: 'icon-gold', color: '#FFD700', img: '/res/spr/gold_ingot.png' },
+        { id: 'enderpearl', name: '末影珍珠', class: 'icon-enderpearl', color: '#008080', img: '/res/spr/enderpearl.png' },
+        { id: 'dye', name: '红染料', class: 'icon-dye', color: '#D32F2F', img: '/res/spr/dye.png' },
+        { id: 'star', name: '下界之星', class: 'icon-star', color: '#E0FFFF', img: '/res/spr/star.png' }
+    ];
+
+    let inventory = {};
+    let craftGrid = Array(9).fill(null);
+    let selectedItem = null;
+    let canvas, ctx, animationId;
+
+    // --- 流程控制 ---
+    function switchScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    // --- 阶段 2: 收集小游戏逻辑 ---
+    let fallingItems = [];
+    let gameTimer = 10;
+
+    function startGame() {
+        switchScreen('screen-collect');
+        canvas = document.getElementById('collect-canvas');
+        ctx = canvas.getContext('2d');
+        resizeCanvas(canvas);
+        
+        // 重置游戏状态
+        gameTimer = 10;
+        fallingItems = [];
+        document.getElementById('timer').innerText = gameTimer;
+        
+        items.forEach(i => inventory[i.id] = 0);
+        inventory['gunpowder'] = 1;
+        inventory['paper'] = 1;
+
+        let lastSpawn = null; // 修改：初始设为 null，在第一帧同步时间戳
+        const loop = (timestamp) => {
+            if (!document.getElementById('screen-collect').classList.contains('active')) {
+                cancelAnimationFrame(animationId);
+                return;
+            }
+
+            // 同步第一帧的时间
+            if (!lastSpawn) lastSpawn = timestamp;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 每 600ms 生成一个新物品
+            if (timestamp - lastSpawn > 600) {
+                spawnItem();
+                lastSpawn = timestamp;
+            }
+
+            for (let i = fallingItems.length - 1; i >= 0; i--) {
+                const item = fallingItems[i];
+                item.y += item.speed;
+                
+                if (!item.imgElement) {
+                    item.imgElement = new Image();
+                    item.imgElement.src = item.data.img;
+                }
+
+                if (item.imgElement.complete) {
+                    ctx.drawImage(item.imgElement, item.x, item.y, 40, 40);
+                } else {
+                    ctx.fillStyle = item.data.color;
+                    ctx.fillRect(item.x, item.y, 40, 40);
+                }
+
+                if (item.y > canvas.height) {
+                    fallingItems.splice(i, 1);
+                }
+            }
+
+            animationId = requestAnimationFrame(loop);
+        };
+        
+        animationId = requestAnimationFrame(loop);
+
+        const timerInt = setInterval(() => {
+            gameTimer--;
+            document.getElementById('timer').innerText = gameTimer;
+            if (gameTimer <= 0) {
+                clearInterval(timerInt);
+                cancelAnimationFrame(animationId);
+                canvas.removeEventListener('mousedown', handleCollectClick);
+                canvas.removeEventListener('touchstart', handleCollectClick);
+                goToCrafting();
+            }
+        }, 1000);
+
+        const handleCollectClick = (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const x = clientX - rect.left;
+            const y = clientY - rect.top;
+
+            for (let i = fallingItems.length - 1; i >= 0; i--) {
+                const item = fallingItems[i];
+                if (x >= item.x && x <= item.x + 40 && y >= item.y && y <= item.y + 40) {
+                    inventory[item.data.id]++;
+                    fallingItems.splice(i, 1);
+                    createClickEffect(x, y);
+                    break; 
+                }
+            }
+        };
+        canvas.addEventListener('mousedown', handleCollectClick);
+        canvas.addEventListener('touchstart', handleCollectClick);
+    }
+
+    function spawnItem() {
+        const rand = Math.random();
+        let itemData;
+        if (rand > 0.95) itemData = items[5];
+        else if (rand > 0.8) itemData = items[3];
+        else if (rand > 0.6) itemData = items[2];
+        else itemData = items[Math.floor(Math.random() * 2)];
+
+        fallingItems.push({
+            x: Math.random() * (canvas.width - 40),
+            y: -50,
+            speed: 3 + Math.random() * 3,
+            data: itemData
+        });
+    }
+
+    function createClickEffect(x, y) {
+        const el = document.createElement('div');
+        el.innerText = "+1";
+        el.style.position = 'absolute';
+        el.style.left = x + 'px';
+        el.style.top = y + 'px';
+        el.style.color = '#fff';
+        el.style.fontSize = '20px';
+        el.style.fontWeight = 'bold';
+        el.style.transition = 'all 0.5s';
+        document.getElementById('game-container').appendChild(el);
+        setTimeout(() => {
+            el.style.top = (y - 50) + 'px';
+            el.style.opacity = 0;
+        }, 10);
+        setTimeout(() => el.remove(), 500);
+    }
+
+    function resizeCanvas(c) {
+        c.width = c.parentElement.offsetWidth;
+        c.height = c.parentElement.offsetHeight;
+    }
+
+    // --- 阶段 3: 合成逻辑 ---
+    function goToCrafting() {
+        switchScreen('screen-craft');
+        renderInventory();
+    }
+
+    function renderInventory() {
+        const container = document.getElementById('inventory-display');
+        container.innerHTML = '';
+        items.forEach(item => {
+            if (inventory[item.id] > 0) {
+                const div = document.createElement('div');
+                div.className = 'slot';
+                div.onclick = () => selectInventoryItem(item.id, div);
+                div.innerHTML = `
+                    <img src="${item.img}" class="item-icon" alt="${item.name}">
+                    <span style="position:absolute; bottom:0; right:2px; font-size:10px; font-weight:bold;">${inventory[item.id]}</span>
+                `;
+                container.appendChild(div);
+            }
+        });
+    }
+
+    function selectInventoryItem(id, element) {
+        document.querySelectorAll('.inventory .slot').forEach(el => el.style.borderColor = '#373737');
+        element.style.borderColor = 'white';
+        selectedItem = id;
+    }
+
+    function placeItem(index) {
+        if (!selectedItem) return;
+        if (inventory[selectedItem] > 0) {
+            if (craftGrid[index]) {
+                inventory[craftGrid[index]]++;
+            }
+            craftGrid[index] = selectedItem;
+            inventory[selectedItem]--;
+            renderInventory();
+            renderGrid();
+        }
+    }
+
+    function renderGrid() {
+        const slots = document.getElementById('craft-grid').children;
+        for (let i = 0; i < 9; i++) {
+            slots[i].innerHTML = '';
+            if (craftGrid[i]) {
+                const item = items.find(it => it.id === craftGrid[i]);
+                slots[i].innerHTML = `<img src="${item.img}" class="item-icon" alt="${item.name}">`;
+            }
+        }
+    }
+    
+    function clearGrid() {
+        for(let i=0; i<9; i++) {
+            if(craftGrid[i]) {
+                inventory[craftGrid[i]]++;
+                craftGrid[i] = null;
+            }
+        }
+        renderInventory();
+        renderGrid();
+    }
+
+    // --- 核心：合成配方检测 ---
+    function craftFireworks() {
+        const counts = {};
+        craftGrid.forEach(id => {
+            if (id) counts[id] = (counts[id] || 0) + 1;
+        });
+
+        if (!counts['gunpowder'] || !counts['paper']) {
+            alert("配方错误：你需要至少 1 个火药和 1 张纸！");
+            return;
+        }
+
+        let result = {
+            name: "普通小烟花",
+            msg: "平平安安，顺顺利利",
+            fortune: "村庄新人",
+            color: "#FFFFFF",
+            type: "normal",
+            code: "2026-PEACE" // 对应兑换码后缀
+        };
+
+        if (counts['star']) {
+            result = { name: "像素巨龙 · 传说", msg: "飞龙在天，万事如意！", fortune: "欧气爆棚", color: "rainbow", type: "dragon", code: "DRAGON-888" };
+        } else if (counts['enderpearl']) {
+            result = { name: "虚空之眼 · 史诗", msg: "龙行天下，前程似锦", fortune: "末地行者", color: "#008080", type: "pearl", code: "ENDER-LUCK" };
+        } else if (counts['gold']) {
+            result = { name: "财源滚滚 · 稀有", msg: "金星溅射，财运亨通", fortune: "多财多亿", color: "#FFD700", type: "gold", code: "GOLD-RICH" };
+        } else if (counts['dye']) {
+            result = { name: "红红火火", msg: "大红灯笼高高挂", fortune: "鸿运当头", color: "#D32F2F", type: "red", code: "RED-LUCKY" };
+        }
+
+        launchFireworks(result);
+    }
+
+    // --- 阶段 4: 烟花展示 ---
+    function launchFireworks(resultData) {
+        switchScreen('screen-result');
+        const fCanvas = document.getElementById('firework-canvas');
+        const fCtx = fCanvas.getContext('2d');
+        resizeCanvas(fCanvas);
+
+        document.getElementById('firework-name').innerText = resultData.name;
+        document.getElementById('blessing-text').innerText = resultData.msg;
+        document.getElementById('fortune-word').innerText = resultData.fortune;
+        
+        // 生成最终兑换码：BL(Bloret Launcher) + 年份 + 类型代码
+        const finalCode = `BL26-${resultData.code}`;
+        document.getElementById('redeem-code-display').innerText = finalCode;
+
+        let particles = [];
+        
+        function createExplosion() {
+            const centerX = fCanvas.width / 2;
+            const centerY = fCanvas.height / 3;
+            const particleCount = resultData.type === 'dragon' ? 300 : 100;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 5 + 2;
+                let color = resultData.color;
+                
+                if (color === 'rainbow') {
+                    const colors = ['#f00', '#0f0', '#00f', '#ff0', '#0ff', '#f0f'];
+                    color = colors[Math.floor(Math.random() * colors.length)];
+                }
+
+                particles.push({
+                    x: centerX,
+                    y: centerY,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    alpha: 1,
+                    color: color,
+                    decay: Math.random() * 0.02 + 0.01
+                });
+            }
+        }
+
+        createExplosion();
+        
+        // 播放烟花爆炸音效
+        const explodeAudio = document.getElementById('audio-explode');
+        if (explodeAudio) {
+            explodeAudio.currentTime = 0; // 重置进度以便快速连续播放
+            explodeAudio.play().catch(e => console.log("音频播放被浏览器拦截，需要用户交互后才能播放"));
+        }
+
+        function animate() {
+            fCtx.fillStyle = 'rgba(0, 0, 0, 0.2)'; 
+            fCtx.fillRect(0, 0, fCanvas.width, fCanvas.height);
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.05; 
+                p.alpha -= p.decay;
+
+                fCtx.beginPath();
+                fCtx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+                fCtx.fillStyle = p.color;
+                fCtx.globalAlpha = p.alpha;
+                fCtx.fill();
+
+                if (p.alpha <= 0) particles.splice(i, 1);
+            }
+            fCtx.globalAlpha = 1;
+
+            if (particles.length > 0) {
+                requestAnimationFrame(animate);
+            } else {
+                setTimeout(() => {
+                    document.getElementById('result-text').style.display = 'block';
+                }, 500);
+            }
+        }
+        animate();
+    }
+</script>
+</body>
+</html>
