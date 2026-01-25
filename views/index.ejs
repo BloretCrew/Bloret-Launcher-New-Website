@@ -260,6 +260,21 @@
             background: #005a9e !important;
         }
         
+        /* 按钮文字布局样式 */
+        .link-text-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1.2;
+            text-align: left;
+        }
+
+        .link-subtitle {
+            font-size: 12px;
+            opacity: 0.85;
+            font-weight: 400;
+        }
+        
         .linux {
             display: flex;
             gap: 15px;
@@ -818,7 +833,10 @@
                 <div id="download-buttons" class="download-hero alt-downloads">
                     <a href="https://gitcode.com/Bloret/Bloret-Launcher-Setup/releases/download/26R/Bloret-Launcher-Setup.exe" class="link-button dlink" data-os="win" id="download-buttons-win">
                         <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
-                        下载 Windows 版本
+                        <div class="link-text-wrapper">
+                            <span>下载 Windows 版本</span>
+                            <span class="link-subtitle">Bloret-Launcher-Setup.exe</span>
+                        </div>
                     </a>
                     <a href="#" class="link-button dlink" data-os="other" id="download-buttons-other" onclick="showDownloadModal(event)">
                         <img src="/res/square.and.arrow.down.on.square.svg" alt="其他版本" width="20" height="20">

@@ -1,10 +1,10 @@
 {
   "github_key": "S7wZ4p5c5FMVpE906zqWlpVf2",
-  "BLLatest": "8.1",
+  "BLLatest": "26RC",
   "Description": "Conveniently manage your Minecraft, conveniently play Bloret. 便捷地管理你的 Minecraft，便捷地游玩 Bloret。",
-  "BLNewVersionDescription": "我们迫不及待让你体验到新功能！欢迎体验 BL 8.1\n\n有什么新东西吗？\n\nNuitka 打包\nBloret Launcher 运行速度将会得到极大的提升\n\nBloriko 询问功能\nBloret 服务器信息查询功能\n以上两项新功能是 Bloret Launcher 对 Bloret 服务器融合的巨大进步！欢迎体验反馈！",
+  "BLNewVersionDescription": "Bloret Launcher 迎来重大更新，核心亮点在于引入了 Bloriko AI 智能助手，支持自然语言推荐 Mod 与深度问答；联机模块重构为基于 Easytier 的虚拟组网服务，大幅简化多人游戏连接；新增实用工具如全局截图（支持快捷键）和 Minecraft 悬浮工具栏 ；同时，通行证系统升级支持 2FA 双重验证与账户云端同步，配合底层架构优化及 UI 的 Fluent 风格焕新，全面提升了启动器的智能化与易用性。",
   "Beta":{
-    "enabled": true,
+    "enabled": false,
     "version": "26p2",
     "versionName": "26 Preview 2",
     "description": "全新 Bloret Launcher。公测版本，更多信息请访问：https://github.com/BloretCrew/Bloret-Launcher/releases/tag/26p2"
