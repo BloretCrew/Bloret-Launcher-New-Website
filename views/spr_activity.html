@@ -274,9 +274,9 @@
         { id: 'gunpowder', name: '火药', class: 'icon-gunpowder', color: '#555', img: '/res/spr/gunpowder.png' },
         { id: 'paper', name: '纸', class: 'icon-paper', color: '#fff', img: '/res/spr/paper.png' },
         { id: 'gold', name: '金锭', class: 'icon-gold', color: '#FFD700', img: '/res/spr/gold_ingot.png' },
-        { id: 'enderpearl', name: '末影珍珠', class: 'icon-enderpearl', color: '#008080', img: '/res/spr/enderpearl.png' },
-        { id: 'dye', name: '红染料', class: 'icon-dye', color: '#D32F2F', img: '/res/spr/dye.png' },
-        { id: 'star', name: '下界之星', class: 'icon-star', color: '#E0FFFF', img: '/res/spr/star.png' }
+        { id: 'enderpearl', name: '末影珍珠', class: 'icon-enderpearl', color: '#008080', img: '/res/spr/ender_pearl.png' },
+        { id: 'dye', name: '红染料', class: 'icon-dye', color: '#D32F2F', img: '/res/spr/red_dye.png' },
+        { id: 'star', name: '下界之星', class: 'icon-star', color: '#E0FFFF', img: '/res/spr/nether_star.png' }
     ];
 
     let inventory = {};
@@ -293,113 +293,151 @@
     // --- 阶段 2: 收集小游戏逻辑 ---
     let fallingItems = [];
     let gameTimer = 10;
+    let timerInt = null;
+    let spawnInt = null;
+    
+    // 预加载图片资源
+    const preloadedImages = {};
+    items.forEach(item => {
+        const img = new Image();
+        img.src = item.img;
+        preloadedImages[item.id] = img;
+    });
 
     function startGame() {
+        if (timerInt) clearInterval(timerInt);
+        if (spawnInt) clearInterval(spawnInt);
+        if (animationId) cancelAnimationFrame(animationId);
+        
         switchScreen('screen-collect');
         canvas = document.getElementById('collect-canvas');
         ctx = canvas.getContext('2d');
-        resizeCanvas(canvas);
         
-        // 重置游戏状态
+        // 强制重置画布大小，防止尺寸异常
+        const rect = canvas.parentElement.getBoundingClientRect();
+        canvas.width = rect.width || window.innerWidth;
+        canvas.height = rect.height || window.innerHeight;
+
         gameTimer = 10;
         fallingItems = [];
-        document.getElementById('timer').innerText = gameTimer;
-        
         items.forEach(i => inventory[i.id] = 0);
-        inventory['gunpowder'] = 1;
+        inventory['gunpowder'] = 1; 
         inventory['paper'] = 1;
+        document.getElementById('timer').innerText = gameTimer;
 
-        let lastSpawn = null; // 修改：初始设为 null，在第一帧同步时间戳
-        const loop = (timestamp) => {
-            if (!document.getElementById('screen-collect').classList.contains('active')) {
-                cancelAnimationFrame(animationId);
-                return;
-            }
+        // 生成频率：每 400ms 掉落一个
+        spawnInt = setInterval(() => {
+            if(gameTimer > 0) spawnItem();
+        }, 400);
 
-            // 同步第一帧的时间
-            if (!lastSpawn) lastSpawn = timestamp;
+        timerInt = setInterval(() => {
+            gameTimer--;
+            document.getElementById('timer').innerText = gameTimer;
+            if (gameTimer <= 0) endCollectStage();
+        }, 1000);
 
+        function renderLoop() {
+            // 严格检查当前界面，防止后台运行
+            if (!document.getElementById('screen-collect').classList.contains('active')) return;
+            
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // 每 600ms 生成一个新物品
-            if (timestamp - lastSpawn > 600) {
-                spawnItem();
-                lastSpawn = timestamp;
-            }
-
             for (let i = fallingItems.length - 1; i >= 0; i--) {
                 const item = fallingItems[i];
                 item.y += item.speed;
                 
-                if (!item.imgElement) {
-                    item.imgElement = new Image();
-                    item.imgElement.src = item.data.img;
-                }
-
-                if (item.imgElement.complete) {
-                    ctx.drawImage(item.imgElement, item.x, item.y, 40, 40);
+                const img = preloadedImages[item.data.id];
+                // 修复：必须确保图片加载成功(naturalWidth > 0)才绘制图片，否则绘制方块
+                // 这解决了图片 404 导致物品透明消失的问题
+                if (img && img.complete && img.naturalWidth > 0) {
+                    ctx.drawImage(img, item.x, item.y, 45, 45);
                 } else {
                     ctx.fillStyle = item.data.color;
                     ctx.fillRect(item.x, item.y, 40, 40);
+                    // 绘制简易边框，让方块更好看
+                    ctx.strokeStyle = '#fff';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(item.x, item.y, 40, 40);
                 }
 
-                if (item.y > canvas.height) {
-                    fallingItems.splice(i, 1);
-                }
+                if (item.y > canvas.height) fallingItems.splice(i, 1);
             }
+            animationId = requestAnimationFrame(renderLoop);
+        }
+        animationId = requestAnimationFrame(renderLoop);
 
-            animationId = requestAnimationFrame(loop);
+        // 绑定点击事件，处理坐标
+        canvas.onclick = (e) => handleInput(e.clientX, e.clientY);
+        canvas.ontouchstart = (e) => {
+            if(e.cancelable) e.preventDefault();
+            handleInput(e.touches[0].clientX, e.touches[0].clientY);
         };
-        
-        animationId = requestAnimationFrame(loop);
+    }
 
-        const timerInt = setInterval(() => {
-            gameTimer--;
-            document.getElementById('timer').innerText = gameTimer;
-            if (gameTimer <= 0) {
-                clearInterval(timerInt);
-                cancelAnimationFrame(animationId);
-                canvas.removeEventListener('mousedown', handleCollectClick);
-                canvas.removeEventListener('touchstart', handleCollectClick);
-                goToCrafting();
+    function handleInput(clientX, clientY) {
+        const rect = canvas.getBoundingClientRect();
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+
+        for (let i = fallingItems.length - 1; i >= 0; i--) {
+            const item = fallingItems[i];
+            // 判定范围比显示范围稍大，方便点击
+            if (x >= item.x - 10 && x <= item.x + 55 && y >= item.y - 10 && y <= item.y + 55) {
+                inventory[item.data.id]++;
+                createClickEffect(item.x, item.y);
+                fallingItems.splice(i, 1);
+                break; 
             }
-        }, 1000);
-
-        const handleCollectClick = (e) => {
-            const rect = canvas.getBoundingClientRect();
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            const x = clientX - rect.left;
-            const y = clientY - rect.top;
-
-            for (let i = fallingItems.length - 1; i >= 0; i--) {
-                const item = fallingItems[i];
-                if (x >= item.x && x <= item.x + 40 && y >= item.y && y <= item.y + 40) {
-                    inventory[item.data.id]++;
-                    fallingItems.splice(i, 1);
-                    createClickEffect(x, y);
-                    break; 
-                }
-            }
-        };
-        canvas.addEventListener('mousedown', handleCollectClick);
-        canvas.addEventListener('touchstart', handleCollectClick);
+        }
     }
 
     function spawnItem() {
-        const rand = Math.random();
+        const rand = Math.random() * 100;
         let itemData;
-        if (rand > 0.95) itemData = items[5];
-        else if (rand > 0.8) itemData = items[3];
-        else if (rand > 0.6) itemData = items[2];
-        else itemData = items[Math.floor(Math.random() * 2)];
+        
+        // 概率分配
+        if (rand < 12) itemData = items[5];      // 下界之星
+        else if (rand < 28) itemData = items[3]; // 末影珍珠
+        else if (rand < 48) itemData = items[2]; // 金锭
+        else if (rand < 68) itemData = items[4]; // 红染料
+        else if (rand < 84) itemData = items[0]; // 火药
+        else itemData = items[1];                // 纸
 
         fallingItems.push({
-            x: Math.random() * (canvas.width - 40),
+            x: 10 + Math.random() * (canvas.width - 60),
             y: -50,
-            speed: 3 + Math.random() * 3,
+            speed: 3.5 + Math.random() * 4.5,
             data: itemData
         });
+    }
+
+    function handleCollectClick(e) {
+        if (e.cancelable) e.preventDefault();
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+
+        for (let i = fallingItems.length - 1; i >= 0; i--) {
+            const item = fallingItems[i];
+            // 扩大点击判定范围，改善手感
+            if (x >= item.x - 10 && x <= item.x + 55 && y >= item.y - 10 && y <= item.y + 55) {
+                inventory[item.data.id]++;
+                createClickEffect(item.x, item.y);
+                fallingItems.splice(i, 1);
+                break; 
+            }
+        }
+    }
+
+    function endCollectStage() {
+        clearInterval(timerInt);
+        clearInterval(spawnInt);
+        cancelAnimationFrame(animationId);
+        canvas.removeEventListener('mousedown', handleCollectClick);
+        canvas.removeEventListener('touchstart', handleCollectClick);
+        goToCrafting();
     }
 
     function createClickEffect(x, y) {
