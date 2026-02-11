@@ -81,13 +81,13 @@ app.get('/spr_activity', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'spr_activity.html'));
 });
 
-# 启动服务器
+// 启动服务器
 const server = app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
 
-# 针对 WebKit/Safari 的连接稳定性优化
-# 设置超时略大于 Nginx 的 keepalive_timeout（通常为 65s）
+// 针对 WebKit/Safari 的连接稳定性优化
+// 设置超时略大于 Nginx 的 keepalive_timeout（通常为 65s）
 server.keepAliveTimeout = 70000;
 server.headersTimeout = 71000;
 
