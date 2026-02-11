@@ -4,6 +4,7 @@ const fs = require('fs');
 const favicon = require('serve-favicon');
 
 const app = express();
+app.set('trust proxy', true); // 信任 Nginx 反向代理，确保正确识别 https 协议
 const port = 3001; // 更改端口以避免冲突
 
 // 用户访问记录中间件
