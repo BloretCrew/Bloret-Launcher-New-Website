@@ -43,11 +43,14 @@ app.use('/dbtest', express.static(path.join(__dirname, 'dbtest')));
 // 解析JSON请求体
 app.use(express.json());
 
-// 强制 HSTS 头部，告知 Safari 始终使用 HTTPS
+// WebKit 安全性与兼容性增强中间件
 app.use((req, res, next) => {
   res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
-  // 解决 WebKit 在代理环境下的内容类型嗅探问题
   res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Content-Security-Policy', "default-src 'self' https: 'unsafe-inline' 'unsafe-eval'; img-src 'self' data: https:; font-src 'self' https: data:;");
   next();
 });
 
