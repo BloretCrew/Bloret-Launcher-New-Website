@@ -1,26 +1,10 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-const https = require('https');
 const favicon = require('serve-favicon');
 
 const app = express();
-const port = 3000; // HTTP port
-const httpsPort = 3001; // HTTPS port
-
-// Load SSL certificates
-const sslOptions = {
-  key: fs.readFileSync(path.join(__dirname, 'server.key')),
-  cert: fs.readFileSync(path.join(__dirname, 'server.cert'))
-};
-
-// 添加HTTP到HTTPS重定向中间件（必须在其他中间件之前）
-app.use((req, res, next) => {
-  if (!req.secure && req.get('x-forwarded-proto') !== 'https') {
-    return res.redirect('https://' + req.get('host').replace(':' + port, ':' + httpsPort) + req.url);
-  }
-  next();
-});
+const port = 3001; // 更改端口以避免冲突
 
 // 用户访问记录中间件
 app.use((req, res, next) => {
@@ -78,38 +62,19 @@ app.get('/spr_activity', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'spr_activity.html'));
 });
 
-// 启动HTTPS服务器
-const httpsServer = https.createServer(sslOptions, app).listen(httpsPort, () => {
-  console.log(`HTTPS Server is running at https://localhost:${httpsPort}`);
-});
-
-// 启动HTTP服务器（重定向到HTTPS）
-const httpServer = app.listen(port, () => {
-  console.log(`HTTP Server is running at http://localhost:${port} (redirecting to HTTPS)`);
+// 启动服务器
+const server = app.listen(port, () => {
+  console.log(`Server is running at http://localhost:${port}`);
 });
 
 // 错误处理
-httpsServer.on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
-    console.log(`Port ${httpsPort} is already in use, trying ${httpsPort + 1}`);
-    setTimeout(() => {
-      httpsServer.close();
-      https.createServer(sslOptions, app).listen(httpsPort + 1, () => {
-        console.log(`HTTPS Server is running at https://localhost:${httpsPort + 1}`);
-      });
-    }, 1000);
-  } else {
-    console.error(err);
-  }
-});
-
-httpServer.on('error', (err) => {
+server.on('error', (err) => {
   if (err.code === 'EADDRINUSE') {
     console.log(`Port ${port} is already in use, trying ${port + 1}`);
     setTimeout(() => {
-      httpServer.close();
+      server.close();
       app.listen(port + 1, () => {
-        console.log(`HTTP Server is running at http://localhost:${port + 1}`);
+        console.log(`Server is running at http://localhost:${port + 1}`);
       });
     }, 1000);
   } else {
