@@ -43,6 +43,24 @@ app.use('/dbtest', express.static(path.join(__dirname, 'dbtest')));
 // 解析JSON请求体
 app.use(express.json());
 
+// 强制 HSTS 头部，告知 Safari 始终使用 HTTPS
+app.use((req, res, next) => {
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+  // 解决 WebKit 在代理环境下的内容类型嗅探问题
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  next();
+});
+
+// 显式处理 favicon.ico 请求，防止 Safari 因获取不到图标而报错
+app.get('/favicon.ico', (req, res) => {
+  const faviconPath = path.join(__dirname, 'res', 'icons', 'BL.png');
+  if (fs.existsSync(faviconPath)) {
+    res.sendFile(faviconPath);
+  } else {
+    res.status(204).end();
+  }
+});
+
 // 路由
 app.get('/', (req, res) => {
   const config = readConfig();
@@ -63,10 +81,15 @@ app.get('/spr_activity', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'spr_activity.html'));
 });
 
-// 启动服务器
+# 启动服务器
 const server = app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
+
+# 针对 WebKit/Safari 的连接稳定性优化
+# 设置超时略大于 Nginx 的 keepalive_timeout（通常为 65s）
+server.keepAliveTimeout = 70000;
+server.headersTimeout = 71000;
 
 // 错误处理
 server.on('error', (err) => {
