@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
+    <title>
+        <%= title %>
+    </title>
     <link rel="icon" href="res/icons/BL.png" type="image/png">
     <script type="module" src="https://unpkg.com/@fluentui/web-components"></script>
     <style>
@@ -12,7 +15,8 @@
             padding: 0;
             background: white;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            padding-top: 70px; /* 为固定顶栏留出空间 */
+            padding-top: 70px;
+            /* 为固定顶栏留出空间 */
             position: relative;
             overflow-x: hidden;
         }
@@ -58,6 +62,7 @@
             0% {
                 transform: translateX(-20vw);
             }
+
             100% {
                 transform: translateX(calc(100vw + 50vw));
             }
@@ -70,7 +75,8 @@
             left: 0;
             right: 0;
             display: flex;
-            justify-content: center; /* 居中对齐 */
+            justify-content: center;
+            /* 居中对齐 */
             align-items: center;
             background-color: rgba(255, 255, 255, 0.85);
             color: black;
@@ -87,7 +93,8 @@
             width: 100%;
             transform: translateZ(0);
             margin: 0 auto;
-            max-width: 1200px; /* 最大宽度限制 */
+            max-width: 1200px;
+            /* 最大宽度限制 */
             box-sizing: border-box;
         }
 
@@ -150,16 +157,16 @@
             .navbar {
                 padding: 8px 15px;
             }
-            
+
             .navbar-content {
                 padding: 0 10px;
             }
-            
+
             .navbar-logo {
                 width: 28px;
                 height: 28px;
             }
-            
+
             .navbar-title {
                 font-size: 16px;
             }
@@ -172,9 +179,10 @@
                 font-size: 14px;
                 padding: 6px 12px;
             }
-            
+
             body {
-                padding-top: 60px; /* 在小屏幕上减少顶部内边距 */
+                padding-top: 60px;
+                /* 在小屏幕上减少顶部内边距 */
             }
         }
 
@@ -188,18 +196,18 @@
                 padding: 5px 10px;
             }
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
-        
+
         .hero-content {
             text-align: center;
             padding: 60px 20px;
         }
-        
+
         .hero-content h1 {
             font-size: 3.5rem;
             font-weight: 600;
@@ -208,14 +216,14 @@
             line-height: 1.2;
             height: 1.2em;
         }
-        
+
         /* 添加标题轮播样式 */
         .title-carousel {
             position: relative;
             height: 1.2em;
             overflow: hidden;
         }
-        
+
         .title-item {
             position: absolute;
             top: 0;
@@ -224,15 +232,15 @@
             opacity: 0;
             transition: opacity 0.3s ease-in-out;
         }
-        
+
         .title-item.active {
             opacity: 1;
         }
-        
+
         .download-content-wrapper {
             margin: 40px 0;
         }
-        
+
         #download-buttons {
             display: flex;
             flex-wrap: wrap;
@@ -240,7 +248,7 @@
             gap: 15px;
             margin-bottom: 20px;
         }
-        
+
         .link-button {
             display: flex;
             align-items: center;
@@ -255,11 +263,11 @@
             transition: background 0.2s;
             text-decoration: none;
         }
-        
+
         .link-button:hover {
             background: #005a9e !important;
         }
-        
+
         /* 按钮文字布局样式 */
         .link-text-wrapper {
             display: flex;
@@ -274,23 +282,23 @@
             opacity: 0.85;
             font-weight: 400;
         }
-        
+
         .linux {
             display: flex;
             gap: 15px;
         }
-        
+
         .hero-alt-download-links {
             margin: 20px 0;
             font-size: 14px;
         }
-        
+
         .terms {
             font-size: 12px;
             color: #666;
             margin-top: 20px;
         }
-        
+
         /* Fluent UI 模态对话框样式优化 */
         fluent-dialog {
             --dialog-border-radius: 12px;
@@ -299,7 +307,7 @@
             --dialog-max-width: 700px;
             --dialog-min-height: 700px;
         }
-        
+
         fluent-dialog::part(control) {
             border-radius: 12px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
@@ -307,18 +315,18 @@
             width: 90vw;
             max-width: 700px;
         }
-        
+
         fluent-button {
             --button-border-radius: 8px;
             transition: all 0.2s ease;
             min-height: 48px;
         }
-        
+
         fluent-button:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        
+
         /* 响应式设计 */
         @media (max-width: 768px) {
             fluent-dialog::part(control) {
@@ -326,29 +334,30 @@
                 max-width: none;
                 margin: 10px;
             }
-            
+
             fluent-button {
                 min-height: 52px;
-                font-size: 16px; /* 防止iOS缩放 */
+                font-size: 16px;
+                /* 防止iOS缩放 */
             }
         }
-        
+
         /* 按钮内容布局优化 */
-        fluent-button > div {
+        fluent-button>div {
             display: flex;
             align-items: center;
             justify-content: flex-start;
             width: 100%;
             gap: 12px;
         }
-        
+
         /* 图标样式 */
         fluent-button span[slot="start"] {
             font-size: 20px;
             line-height: 1;
             flex-shrink: 0;
         }
-        
+
         /* 文件扩展名标签 */
         fluent-button span[slot="end"] {
             background: rgba(0, 0, 0, 0.1);
@@ -357,117 +366,121 @@
             font-weight: 500;
             flex-shrink: 0;
         }
-        
+
         /* 对话框内容区域滚动条样式 */
         .dialog-content-scroll {
             scrollbar-width: thin;
             scrollbar-color: #888 #f1f1f1;
         }
-        
+
         .dialog-content-scroll::-webkit-scrollbar {
             width: 6px;
         }
-        
+
         .dialog-content-scroll::-webkit-scrollbar-track {
             background: #f1f1f1;
             border-radius: 3px;
         }
-        
+
         .dialog-content-scroll::-webkit-scrollbar-thumb {
             background: #888;
             border-radius: 3px;
         }
-        
+
         .dialog-content-scroll::-webkit-scrollbar-thumb:hover {
             background: #555;
         }
-        
+
         /* 对话框淡入淡出动画 */
         @keyframes dialogFadeIn {
             from {
                 opacity: 0;
                 transform: scale(0.9) translateY(-20px);
             }
+
             to {
                 opacity: 1;
                 transform: scale(1) translateY(0);
             }
         }
-        
+
         @keyframes dialogFadeOut {
             from {
                 opacity: 1;
                 transform: scale(1) translateY(0);
             }
+
             to {
                 opacity: 0;
                 transform: scale(0.9) translateY(-20px);
             }
         }
-        
+
         /* 对话框显示状态 */
         fluent-dialog[data-show="true"]::part(control) {
             animation: dialogFadeIn 0.3s ease-out forwards;
         }
-        
+
         /* 对话框隐藏状态 */
         fluent-dialog[data-show="false"]::part(control) {
             animation: dialogFadeOut 0.3s ease-out forwards;
         }
-        
+
         /* 遮罩层淡入淡出 */
         @keyframes overlayFadeIn {
             from {
                 opacity: 0;
             }
+
             to {
                 opacity: 1;
             }
         }
-        
+
         @keyframes overlayFadeOut {
             from {
                 opacity: 1;
             }
+
             to {
                 opacity: 0;
             }
         }
-        
+
         fluent-dialog[data-show="true"] {
             animation: overlayFadeIn 0.3s ease-out forwards;
         }
-        
+
         fluent-dialog[data-show="false"] {
             animation: overlayFadeOut 0.3s ease-out forwards;
         }
-        
+
         a {
             color: #007acc;
             text-decoration: none;
         }
-        
+
         a:hover {
             text-decoration: underline;
         }
-        
+
         .hero-graphic-container {
             background: linear-gradient(180deg, #f5f5f5 0%, #e0e0e0 100%);
             border-radius: 8px;
             padding: 20px;
             margin: 40px 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        
+
         .editor-container {
             background: #1e1e1e;
             border-radius: 6px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             max-width: 1000px;
             margin: 0 auto;
         }
-        
+
         .top-bar {
             background: #333;
             height: 30px;
@@ -476,47 +489,47 @@
             padding: 0 10px;
             justify-content: space-between;
         }
-        
+
         .window-controls {
             display: flex;
             gap: 8px;
         }
-        
+
         .window-button {
             width: 12px;
             height: 12px;
             border-radius: 50%;
         }
-        
+
         .close {
             background: #ff5f56;
         }
-        
+
         .minimize {
             background: #ffbd2e;
         }
-        
+
         .maximize {
             background: #27c93f;
         }
-        
+
         .settings-icon {
             color: #ccc;
             cursor: pointer;
         }
-        
+
         .editor-main {
             display: flex;
             height: 400px;
         }
-        
+
         .side-bar {
             width: 200px;
             background: #333;
             display: flex;
             flex-direction: column;
         }
-        
+
         .activity-bar {
             width: 48px;
             background: #333;
@@ -526,20 +539,20 @@
             padding: 10px 0;
             gap: 20px;
         }
-        
+
         .activity-icon {
             color: #ccc;
             cursor: pointer;
             padding: 8px;
         }
-        
+
         .side-bar-view {
             flex: 1;
             padding: 10px;
             color: white;
             font-size: 14px;
         }
-        
+
         .editor-area {
             flex: 1;
             background: #1e1e1e;
@@ -550,12 +563,12 @@
             overflow: auto;
             position: relative;
         }
-        
+
         .code-content {
             margin: 0;
             line-height: 1.5;
         }
-        
+
         .line-numbers {
             position: absolute;
             left: 0;
@@ -619,8 +632,8 @@
         .navbar {
             background-color: var(--bg-navbar);
             box-shadow: 0 1.6px 3.6px var(--shadow-color),
-                        0 0.3px 0.9px var(--shadow-color),
-                        0 0 0 1px var(--border-color) inset;
+                0 0.3px 0.9px var(--shadow-color),
+                0 0 0 1px var(--border-color) inset;
             transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -779,26 +792,28 @@
         .light-only {
             display: inline-block;
         }
-        
+
         .dark-only {
             display: none;
         }
-        
+
         [data-theme="dark"] .light-only {
             display: none;
         }
-        
+
         [data-theme="dark"] .dark-only {
             display: inline-block;
         }
     </style>
 </head>
-<body>
+
+<body data-bl-latest="<%= BLLatest %>">
     <!-- 主题切换按钮已移动到顶栏导航中 -->
-    
+
     <!-- 背景图标 -->
-    <div class="background-icons" id="backgroundIcons"></div>
-    
+    <div class="background-icons" id="backgroundIcons" data-background-icons='<%- JSON.stringify(backgroundIcons) %>'>
+    </div>
+
     <!-- 顶栏导航 -->
     <nav class="navbar">
         <div class="navbar-content">
@@ -820,124 +835,181 @@
         <section class="hero-content">
             <h1>
                 <div class="title-carousel">
-                    <% titles.forEach((title, index) => { %>
-                        <div class="title-item <%= index === 0 ? 'active' : '' %>"><%= title %></div>
-                    <% }); %>
+                    <% titles.forEach((title, index)=> { %>
+                        <div class="title-item <%= index === 0 ? 'active' : '' %>">
+                            <%= title %>
+                        </div>
+                        <% }); %>
                 </div>
             </h1>
             <p class="terms">
                 <%= Description %>
             </p>
-            
+
             <div class="download-content-wrapper">
                 <div id="download-buttons" class="download-hero alt-downloads">
-                    <a href="https://gitcode.com/Bloret/Bloret-Launcher-Setup/releases/download/26R/Bloret-Launcher-Setup.exe" class="link-button dlink" data-os="win" id="download-buttons-win">
+                    <a href="https://gitcode.com/Bloret/Bloret-Launcher-Setup/releases/download/26R/Bloret-Launcher-Setup.exe"
+                        class="link-button dlink" data-os="win" id="download-buttons-win">
                         <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
                         <div class="link-text-wrapper">
                             <span>下载 Windows 版本</span>
                             <span class="link-subtitle">Bloret-Launcher-Setup.exe</span>
                         </div>
                     </a>
-                    <a href="#" class="link-button dlink" data-os="other" id="download-buttons-other" onclick="showDownloadModal(event)">
+                    <a href="#" class="link-button dlink" data-os="other" id="download-buttons-other"
+                        onclick="showDownloadModal(event)">
                         <img src="/res/square.and.arrow.down.on.square.svg" alt="其他版本" width="20" height="20">
                     </a>
                 </div>
-                
+
                 <p class="terms">
                     按下下载按钮以下载 Bloret Launcher Setup 在线安装程序。<br>
                     本安装程序是在线安装程序，安装过程中需要保证互联网连接。<br>
                     如需离线安装，请单击右侧按钮下载压缩包。
                     <!-- 即使 Bloret Launcher 更新了新版本，通过 Bloret Launcher Setup 安装的版本也是最新版本，无需再次下载 Bloret Launcher Setup 以进行安装。 -->
                 </p>
-                
+
                 <p class="terms">
                     当前版本: Bloret Launcher <%= BLLatest %>
-                    <% if (Beta && Beta.enabled) { %>
-                        <br>
-                        当前正在测试: Bloret Launcher <%= BetaVersionName %>
-                    <% } %>
+                        <% if (Beta && Beta.enabled) { %>
+                            <br>
+                            当前正在测试: Bloret Launcher <%= BetaVersionName %>
+                                <% } %>
                 </p>
 
                 <p id="download-matrix-label" class="hero-alt-download-links">
-                    <a href="http://pcfs.eno.ink:2" target="_blank" rel="noopener">以前的网站</a>,  
-                    <a href="http://pcfs.eno.ink:2/download.html">其他版本下载</a>, 
+                    <a href="http://pcfs.eno.ink:2" target="_blank" rel="noopener">以前的网站</a>,
+                    <a href="http://pcfs.eno.ink:2/download.html">其他版本下载</a>,
                     <a href="https://github.com/BloretCrew/Bloret-Launcher" id="download-buttons-insiders"> Github </a>
                 </p>
             </div>
         </section>
-        
-        <img src="../BLlight.png" alt="Bloret Launcher" style="width: 75%; height: auto; display: block; margin: 0 auto;" />
+
+        <img src="../BLlight.png" alt="Bloret Launcher"
+            style="width: 75%; height: auto; display: block; margin: 0 auto;" />
     </div>
-    
-    <!-- Fluent UI 模态对话框 -->
+
+    <!-- Fluent UI 模态对话框 - 架构选择 (macOS) -->
+    <fluent-dialog id="macOSModal" modal="true" hidden data-show="false">
+        <div style="padding: 32px; min-width: 400px; border-radius: 8px;">
+            <h2
+                style="margin-top: 0; margin-bottom: 24px; color: var(--text-primary); font-size: 28px; font-weight: 600;">
+                选择 macOS 架构</h2>
+            <p style="margin-bottom: 20px; color: var(--text-secondary);">无法自动识别您的 Mac 芯片类型，请手动选择：</p>
+
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-<%= BLLatest %>-macOS-ARM.dmg"
+                    class="link-button dlink" style="justify-content: flex-start; padding: 15px 20px;">
+                    <img src="/res/apple.logo.svg" alt="Apple" width="24" height="24">
+                    <div style="text-align: left; margin-left: 10px;">
+                        <div style="font-weight: 600;">Apple Silicon (M1/M2/M3)</div>
+                        <div style="font-size: 12px; opacity: 0.8;">适合较新的 Mac 电脑</div>
+                    </div>
+                </a>
+
+                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-<%= BLLatest %>-macOS-Intel.dmg"
+                    class="link-button dlink" style="justify-content: flex-start; padding: 15px 20px;">
+                    <img src="/res/cpu.svg" alt="Intel" width="24" height="24">
+                    <div style="text-align: left; margin-left: 10px;">
+                        <div style="font-weight: 600;">Intel 芯片</div>
+                        <div style="font-size: 12px; opacity: 0.8;">适合较旧的 Mac 电脑</div>
+                    </div>
+                </a>
+            </div>
+
+            <div
+                style="margin-top: 25px; padding: 15px; background: var(--bg-secondary); border-radius: 8px; font-size: 13px; color: var(--text-secondary); border: 1px solid var(--border-color);">
+                <strong>如何识别？</strong><br>
+                点击屏幕左上角的  苹果图标 -> <strong>关于本机</strong>。<br>
+                查看“芯片”或“处理器”一行：<br>
+                • 包含 "Apple M1/M2/M3" 为 Apple Silicon (ARM)<br>
+                • 包含 "Intel" 为 Intel 芯片
+            </div>
+
+            <div style="margin-top: 32px; text-align: right;">
+                <fluent-button style="width: 100px;" onclick="hideMacOSModal()">取消</fluent-button>
+            </div>
+        </div>
+    </fluent-dialog>
+
+    <!-- Fluent UI 模态对话框 - 所有版本 -->
     <fluent-dialog id="downloadModal" modal="true" hidden data-show="false">
         <div style="padding: 32px; min-width: 400px; min-height: 500px;">
             <h2 style="margin-top: 0; margin-bottom: 24px; color: #333; font-size: 28px; font-weight: 600;">选择下载版本</h2>
-            <div style="display: flex; flex-direction: column; gap: 20px; max-height: 400px; overflow-y: auto; padding-right: 8px;" class="dialog-content-scroll">
-
+            <div style="display: flex; flex-direction: column; gap: 20px; max-height: 400px; overflow-y: auto; padding-right: 8px;"
+                class="dialog-content-scroll">
                 <h3 style="margin-top: 20px; margin-bottom: 20px; color: #333;">
-                    <img class="checkmark-icon light-only" src="../res/checkmark.seal.svg" alt="Flask" width="20" height="20">
-                    <img class="checkmark-icon dark-only" src="../res/checkmark.seal_white.svg" alt="Flask" width="20" height="20">
+                    <img class="checkmark-icon light-only" src="../res/checkmark.seal.svg" alt="Flask" width="20"
+                        height="20">
+                    <img class="checkmark-icon dark-only" src="../res/checkmark.seal_white.svg" alt="Flask" width="20"
+                        height="20">
                     Bloret Launcher <%= BLLatest %>
                 </h3>
-                <a href="https://gitcode.com/Bloret/Bloret-Launcher-Setup/releases/download/26R/Bloret-Launcher-Setup.exe" class="link-button dlink" data-os="win" id="download-buttons-win">
+                <a href="https://gitcode.com/Bloret/Bloret-Launcher-Setup/releases/download/26R/Bloret-Launcher-Setup.exe"
+                    class="link-button dlink" data-os="win">
                     <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
                     <img src="../res/arrow.down.app.dashed.svg" alt="Windows 11" width="20" height="20">
                     <img src="../res/GitCode.png" alt="Windows 11" width="20" height="20">
                     Bloret Launcher <%= BLLatest %> Setup For Windows (GitCode)
                 </a>
-                <a href="https://github.com/BloretCrew/Bloret-Launcher-Setup/releases/latest/download/Bloret-Launcher-Setup.exe" class="link-button dlink" data-os="win" id="download-buttons-win">
+                <a href="https://github.com/BloretCrew/Bloret-Launcher-Setup/releases/latest/download/Bloret-Launcher-Setup.exe"
+                    class="link-button dlink" data-os="win">
                     <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
                     <img src="../res/arrow.down.app.dashed.svg" alt="Windows 11" width="20" height="20">
                     <img src="../res/icons/github-mark-white.png" alt="Windows 11" width="20" height="20">
                     Bloret Launcher <%= BLLatest %> Setup For Windows (Github)
                 </a>
-                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-Windows.zip" class="link-button dlink" data-os="win" id="download-buttons-win">
+                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-Windows.zip"
+                    class="link-button dlink" data-os="win">
                     <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="Windows 11" width="20" height="20">
                     <img src="../res/GitCode.png" alt="Windows 11" width="20" height="20">
                     Bloret Launcher <%= BLLatest %> zip For Windows (GitCode)
                 </a>
-                <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/latest/download/Bloret-Launcher-Windows.zip" class="link-button dlink" data-os="win" id="download-buttons-win">
+                <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/latest/download/Bloret-Launcher-Windows.zip"
+                    class="link-button dlink" data-os="win">
                     <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="Windows 11" width="20" height="20">
                     <img src="../res/icons/github-mark-white.png" alt="Windows 11" width="20" height="20">
                     Bloret Launcher <%= BLLatest %> zip For Windows (Github)
                 </a>
 
-<% if (Beta && Beta.enabled) { %>
-
-                <h3 style="margin-top: 20px; margin-bottom: 20px; color: #333;">
-                    <img src="../res/flask.svg" alt="Flask" width="20" height="20">
-                    Bloret Launcher <%= BetaVersionName %>
-                </h3>
-                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BetaVersion %>/Bloret-Launcher-Setup.exe" class="link-button dlink" data-os="win" id="download-buttons-win">
-                    <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
-                    <img src="../res/arrow.down.app.dashed.svg" alt="Windows 11" width="20" height="20">
-                    <img src="../res/GitCode.png" alt="Windows 11" width="20" height="20">
-                    Bloret Launcher <%= BetaVersionName %> Setup For Windows (GitCode)
-                </a>
-                <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/download/<%= BetaVersion %>/Bloret-Launcher-Setup.exe" class="link-button dlink" data-os="win" id="download-buttons-win">
-                    <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
-                    <img src="../res/arrow.down.app.dashed.svg" alt="Windows 11" width="20" height="20">
-                    <img src="../res/icons/github-mark-white.png" alt="Windows 11" width="20" height="20">
-                    Bloret Launcher <%= BetaVersionName %> Setup For Windows (Github)
-                </a>
-                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BetaVersion %>/Bloret-Launcher-Windows.zip" class="link-button dlink" data-os="win" id="download-buttons-win">
-                    <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
-                    <img src="../res/shippingbox.svg" alt="Windows 11" width="20" height="20">
-                    <img src="../res/GitCode.png" alt="Windows 11" width="20" height="20">
-                    Bloret Launcher <%= BetaVersionName %> zip For Windows (GitCode)
-                </a>
-                <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/download/<%= BetaVersion %>/Bloret-Launcher-Setup.exe" class="link-button dlink" data-os="win" id="download-buttons-win">
-                    <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
-                    <img src="../res/shippingbox.svg" alt="Windows 11" width="20" height="20">
-                    <img src="../res/icons/github-mark-white.png" alt="Windows 11" width="20" height="20">
-                    Bloret Launcher <%= BetaVersionName %> zip For Windows (Github)
-                </a>
-<% } %>
+                <% if (Beta && Beta.enabled) { %>
+                    <h3 style="margin-top: 20px; margin-bottom: 20px; color: #333;">
+                        <img src="../res/flask.svg" alt="Flask" width="20" height="20">
+                        Bloret Launcher <%= BetaVersionName %>
+                    </h3>
+                    <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BetaVersion %>/Bloret-Launcher-Setup.exe"
+                        class="link-button dlink" data-os="win">
+                        <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
+                        <img src="../res/arrow.down.app.dashed.svg" alt="Windows 11" width="20" height="20">
+                        <img src="../res/GitCode.png" alt="Windows 11" width="20" height="20">
+                        Bloret Launcher <%= BetaVersionName %> Setup For Windows (GitCode)
+                    </a>
+                    <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/download/<%= BetaVersion %>/Bloret-Launcher-Setup.exe"
+                        class="link-button dlink" data-os="win">
+                        <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
+                        <img src="../res/arrow.down.app.dashed.svg" alt="Windows 11" width="20" height="20">
+                        <img src="../res/icons/github-mark-white.png" alt="Windows 11" width="20" height="20">
+                        Bloret Launcher <%= BetaVersionName %> Setup For Windows (Github)
+                    </a>
+                    <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BetaVersion %>/Bloret-Launcher-Windows.zip"
+                        class="link-button dlink" data-os="win">
+                        <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
+                        <img src="../res/shippingbox.svg" alt="Windows 11" width="20" height="20">
+                        <img src="../res/GitCode.png" alt="Windows 11" width="20" height="20">
+                        Bloret Launcher <%= BetaVersionName %> zip For Windows (GitCode)
+                    </a>
+                    <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/download/<%= BetaVersion %>/Bloret-Launcher-Setup.exe"
+                        class="link-button dlink" data-os="win">
+                        <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
+                        <img src="../res/shippingbox.svg" alt="Windows 11" width="20" height="20">
+                        <img src="../res/icons/github-mark-white.png" alt="Windows 11" width="20" height="20">
+                        Bloret Launcher <%= BetaVersionName %> zip For Windows (Github)
+                    </a>
+                    <% } %>
             </div>
-            
+
             <div style="margin-top: 32px; text-align: right;">
                 <fluent-button style="width: 160px; height: 42px; font-size: 16px;" onclick="hideDownloadModal()">
                     取消
@@ -945,8 +1017,84 @@
             </div>
         </div>
     </fluent-dialog>
-    
+
     <script>
+        function detectOSAndSetLink() {
+            const userAgent = window.navigator.userAgent;
+            const platform = window.navigator.platform;
+            const downloadBtn = document.getElementById('download-buttons-win');
+            if (!downloadBtn) return;
+            const downloadBtnText = downloadBtn.querySelector('.link-text-wrapper span:first-child');
+            const downloadBtnSubtitle = downloadBtn.querySelector('.link-subtitle');
+            const downloadBtnIcon = downloadBtn.querySelector('img');
+
+            const latest = document.body.dataset.blLatest;
+
+            // macOS detection - combine userAgent and platform for robustness
+            const isMac = userAgent.indexOf('Mac') !== -1 || platform.indexOf('Mac') !== -1;
+            const isWin = userAgent.indexOf('Win') !== -1 || platform.indexOf('Win') !== -1;
+            const isLinux = userAgent.indexOf('Linux') !== -1 || platform.indexOf('Linux') !== -1;
+
+            if (isMac) {
+                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                if (isDark) {
+                    if (downloadBtnIcon) downloadBtnIcon.src = 'https://img.bloret.net/SF/macbook';
+                } else {
+                    if (downloadBtnIcon) downloadBtnIcon.src = 'https://img.bloret.net/SF/macbook?color=white';
+                }
+                if (downloadBtnText) downloadBtnText.textContent = '下载 macOS 版本';
+                if (downloadBtnSubtitle) downloadBtnSubtitle.textContent = '选择架构以继续';
+
+                downloadBtn.onclick = (e) => {
+                    e.preventDefault();
+                    showMacOSModal();
+                };
+
+                // Attempt to detect architecture
+                if (window.navigator.userAgentData && window.navigator.userAgentData.getHighEntropyValues) {
+                    window.navigator.userAgentData.getHighEntropyValues(['architecture']).then(values => {
+                        if (values.architecture === 'arm') {
+                            downloadBtn.onclick = null;
+                            downloadBtn.href = `https://gitcode.com/Bloret/Bloret-Launcher/releases/download/${latest}/Bloret-Launcher-${latest}-macOS-ARM.dmg`;
+                            if (downloadBtnSubtitle) downloadBtnSubtitle.textContent = `Bloret-Launcher-${latest}-macOS-ARM.dmg`;
+                        } else if (values.architecture === 'x86') {
+                            downloadBtn.onclick = null;
+                            downloadBtn.href = `https://gitcode.com/Bloret/Bloret-Launcher/releases/download/${latest}/Bloret-Launcher-${latest}-macOS-Intel.dmg`;
+                            if (downloadBtnSubtitle) downloadBtnSubtitle.textContent = `Bloret-Launcher-${latest}-macOS-Intel.dmg`;
+                        }
+                    }).catch(err => {
+                        console.log('Arch detection failed, using fallback modal');
+                    });
+                }
+            } else if (isWin) {
+                downloadBtn.href = 'https://gitcode.com/Bloret/Bloret-Launcher-Setup/releases/download/26R/Bloret-Launcher-Setup.exe';
+                if (downloadBtnText) downloadBtnText.textContent = '下载 Windows 版本';
+                if (downloadBtnSubtitle) downloadBtnSubtitle.textContent = 'Bloret-Launcher-Setup.exe';
+                if (downloadBtnIcon) downloadBtnIcon.src = '../Windows11.png';
+            } else if (isLinux) {
+                downloadBtn.href = `https://gitcode.com/Bloret/Bloret-Launcher/releases/download/${latest}/Bloret-Launcher-${latest}-Linux.zip`;
+                if (downloadBtnText) downloadBtnText.textContent = '下载 Linux 版本';
+                if (downloadBtnSubtitle) downloadBtnSubtitle.textContent = `Bloret-Launcher-${latest}-Linux.zip`;
+                if (downloadBtnIcon) downloadBtnIcon.src = '/res/terminal.svg';
+            }
+        }
+
+        function showMacOSModal() {
+            const modal = document.getElementById('macOSModal');
+            if (modal) {
+                modal.setAttribute('data-show', 'true');
+                modal.hidden = false;
+            }
+        }
+
+        function hideMacOSModal() {
+            const modal = document.getElementById('macOSModal');
+            if (modal) {
+                modal.setAttribute('data-show', 'false');
+                setTimeout(() => { modal.hidden = true; }, 300);
+            }
+        }
+
         // 主题切换功能
         function getSystemTheme() {
             if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -965,16 +1113,17 @@
         function toggleTheme() {
             const currentTheme = document.documentElement.getAttribute('data-theme');
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            
+
             document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             updateNavbarScrollEffect(); // 更新导航栏滚动效果
+            detectOSAndSetLink(); // 更新下载按钮图标（特别是 Mac）
         }
 
         function updateNavbarScrollEffect() {
             const navbar = document.querySelector('.navbar');
             const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            
+
             if (window.scrollY > 10) {
                 if (isDark) {
                     navbar.style.backgroundColor = 'rgba(26, 26, 26, 0.95)';
@@ -999,20 +1148,23 @@
         }
 
         // 标题轮播功能
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // 初始化主题
             initTheme();
-            
+
+            // 运行操作系统检测并设置链接
+            detectOSAndSetLink();
+
             // 绑定主题切换按钮事件
             const themeToggle = document.getElementById('themeToggle');
             if (themeToggle) {
                 themeToggle.addEventListener('click', toggleTheme);
             }
-            
+
             // 监听系统主题变化
             if (window.matchMedia) {
                 const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
-                darkModeQuery.addEventListener('change', function(e) {
+                darkModeQuery.addEventListener('change', function (e) {
                     // 只有在用户没有手动设置主题时才跟随系统
                     if (!localStorage.getItem('theme')) {
                         const newTheme = e.matches ? 'dark' : 'light';
@@ -1021,82 +1173,88 @@
                     }
                 });
             }
-            
+
             const titleItems = document.querySelectorAll('.title-item');
             let currentIndex = 0;
-            
+
             // 每 3 秒切换一次标题
             setInterval(() => {
                 // 淡出当前标题
                 titleItems[currentIndex].classList.remove('active');
-                
+
                 // 计算下一个标题索引
                 currentIndex = (currentIndex + 1) % titleItems.length;
-                
+
                 // 淡入下一个标题
                 titleItems[currentIndex].classList.add('active');
             }, 3000);
         });
 
         // 顶栏滚动效果
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             updateNavbarScrollEffect();
         });
 
         // 背景图标动画 - 分批创建以避免初始堆积
         function createFloatingIcons() {
             const iconsContainer = document.getElementById('backgroundIcons');
+            if (!iconsContainer) return;
             console.log('创建背景图标，容器:', iconsContainer);
-            
-            // 从模板获取图标列表
-            const icons = <%- JSON.stringify(backgroundIcons) %>;
-            console.log('从配置获取到图标列表:', icons);
-            
+
+            // 从数据属性获取图标列表
+            let icons = [];
+            try {
+                icons = JSON.parse(iconsContainer.getAttribute('data-background-icons') || '[]');
+            } catch (e) {
+                console.error('Failed to parse background icons:', e);
+            }
+            console.log('从属性获取到图标列表:', icons);
+
             if (!icons || icons.length === 0) {
                 console.warn('没有可用的图标，背景动画将不会显示');
                 return;
             }
-            
+
             const iconSizes = ['small', 'medium', 'large'];
             const numberOfIcons = 25; // 图标数量
-            
+
             // 分批创建图标，避免初始堆积
             function createIconBatch(startIndex, batchSize) {
                 for (let i = startIndex; i < Math.min(startIndex + batchSize, numberOfIcons); i++) {
                     const icon = document.createElement('img');
                     const randomIcon = icons[Math.floor(Math.random() * icons.length)];
                     const randomSize = iconSizes[Math.floor(Math.random() * iconSizes.length)];
-                    
+
                     icon.src = randomIcon;
                     icon.className = `floating-icon ${randomSize}`;
                     icon.style.position = 'absolute';
-                    
+
                     // 随机垂直位置
                     const randomTop = Math.random() * 100; // 0-100% 的垂直位置
                     // 让图标从屏幕左侧外开始，从更远处进入
                     const randomLeft = -20 - Math.random() * 30; // -20到-50% 的水平位置（屏幕左侧更远处）
                     const randomDelay = Math.random() * 3; // 0-3秒的延迟，减少初始延迟
                     const randomDuration = 10 + Math.random() * 8; // 10-18秒的动画持续时间
-                    
+
                     icon.style.top = `${randomTop}%`;
                     icon.style.left = `${randomLeft}%`; // 初始位置在屏幕右侧外
                     icon.style.animationDelay = `${randomDelay}s`;
                     icon.style.animationDuration = `${randomDuration}s`;
-                    
+
                     iconsContainer.appendChild(icon);
-                    console.log(`创建图标 ${i+1}: ${randomIcon}, 大小: ${randomSize}, 位置: ${randomTop}%`);
+                    console.log(`创建图标 ${i + 1}: ${randomIcon}, 大小: ${randomSize}, 位置: ${randomTop}%`);
                 }
             }
-            
+
             // 立即创建第一批图标（5个）
             createIconBatch(0, 5);
-            
+
             // 分批创建剩余的图标
             let currentIndex = 5;
             const batchInterval = setInterval(() => {
                 createIconBatch(currentIndex, 3);
                 currentIndex += 3;
-                
+
                 if (currentIndex >= numberOfIcons) {
                     clearInterval(batchInterval);
                     console.log(`总共创建了 ${numberOfIcons} 个背景图标`);
@@ -1106,16 +1264,16 @@
 
         // 页面加载完成后创建背景图标
         document.addEventListener('DOMContentLoaded', createFloatingIcons);
-        
+
         // 显示下载模态对话框
         function showDownloadModal(event) {
             event.preventDefault();
             const modal = document.getElementById('downloadModal');
-            
+
             // 设置显示状态并移除隐藏属性
             modal.setAttribute('data-show', 'true');
             modal.hidden = false;
-            
+
             // 聚焦到第一个按钮
             setTimeout(() => {
                 const firstButton = modal.querySelector('fluent-button');
@@ -1124,29 +1282,29 @@
                 }
             }, 100);
         }
-        
+
         // 隐藏下载模态对话框
         function hideDownloadModal() {
             const modal = document.getElementById('downloadModal');
-            
+
             // 设置隐藏状态
             modal.setAttribute('data-show', 'false');
-            
+
             // 等待动画完成后隐藏
             setTimeout(() => {
                 modal.hidden = true;
             }, 300);
         }
-        
+
         // 点击模态对话框外部关闭
-        document.getElementById('downloadModal').addEventListener('click', function(event) {
+        document.getElementById('downloadModal').addEventListener('click', function (event) {
             if (event.target === this) {
                 hideDownloadModal();
             }
         });
 
         // 键盘支持 - ESC键关闭模态框
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 const modal = document.getElementById('downloadModal');
                 if (!modal.hidden) {
@@ -1156,9 +1314,10 @@
         });
 
         // 防止模态框内容点击事件冒泡
-        document.querySelector('#downloadModal > div').addEventListener('click', function(e) {
+        document.querySelector('#downloadModal > div').addEventListener('click', function (e) {
             e.stopPropagation();
         });
     </script>
 </body>
+
 </html>
