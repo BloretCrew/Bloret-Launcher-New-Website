@@ -932,6 +932,59 @@
         </div>
     </fluent-dialog>
 
+    <!-- Fluent UI 模态对话框 - 架构选择 (Linux) -->
+    <fluent-dialog id="linuxModal" modal="true" hidden data-show="false">
+        <div style="padding: 32px; min-width: 400px; max-width: 600px; border-radius: 8px;">
+            <h2 style="margin-top: 0; margin-bottom: 24px; color: var(--text-primary); font-size: 28px; font-weight: 600;">
+                选择 Linux 架构</h2>
+            <p style="margin-bottom: 20px; color: var(--text-secondary);">无法自动识别您的 Linux 架构，请手动选择：</p>
+
+            <div style="display: flex; flex-direction: column; gap: 20px; max-height: 50vh; overflow-y: auto;" class="dialog-content-scroll">
+                <!-- x86_64 / amd64 -->
+                <div>
+                    <h3 style="margin: 0 0 10px 0; font-size: 16px; color: var(--text-primary);">x86_64 / amd64 (常见的 Intel/AMD 处理器)</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher_amd64.deb" class="link-button dlink" style="padding: 8px 16px; font-size: 14px;">.deb (Debian/Ubuntu)</a>
+                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-1.x86_64.rpm" class="link-button dlink" style="padding: 8px 16px; font-size: 14px;">.rpm (Fedora/RedHat)</a>
+                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-Linux-amd64.tar.gz" class="link-button dlink" style="padding: 8px 16px; font-size: 14px;">.tar.gz (通用)</a>
+                    </div>
+                </div>
+
+                <!-- aarch64 / arm64 -->
+                <div>
+                    <h3 style="margin: 0 0 10px 0; font-size: 16px; color: var(--text-primary);">aarch64 / arm64 (64位 ARM 处理器)</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher_arm64.deb" class="link-button dlink" style="padding: 8px 16px; font-size: 14px;">.deb (Debian/Ubuntu)</a>
+                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-1.aarch64.rpm" class="link-button dlink" style="padding: 8px 16px; font-size: 14px;">.rpm (Fedora/RedHat)</a>
+                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-Linux-arm64.tar.gz" class="link-button dlink" style="padding: 8px 16px; font-size: 14px;">.tar.gz (通用)</a>
+                    </div>
+                </div>
+
+                <!-- armhf / armv7 -->
+                <div>
+                    <h3 style="margin: 0 0 10px 0; font-size: 16px; color: var(--text-primary);">armhf / armv7 (32位 ARM 处理器)</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher_armhf.deb" class="link-button dlink" style="padding: 8px 16px; font-size: 14px;">.deb (Debian/Ubuntu)</a>
+                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-1.armhf.rpm" class="link-button dlink" style="padding: 8px 16px; font-size: 14px;">.rpm (Fedora/RedHat)</a>
+                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-Linux-armhf.tar.gz" class="link-button dlink" style="padding: 8px 16px; font-size: 14px;">.tar.gz (通用)</a>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 25px; padding: 15px; background: var(--bg-secondary); border-radius: 8px; font-size: 13px; color: var(--text-secondary); border: 1px solid var(--border-color);">
+                <strong>如何识别架构？</strong><br>
+                在终端中运行命令：<code>uname -m</code><br>
+                • <code>x86_64</code> -> 选择 x86_64 / amd64<br>
+                • <code>aarch64</code> -> 选择 aarch64 / arm64<br>
+                • <code>armv7l</code> 或 <code>armhf</code> -> 选择 armhf / armv7
+            </div>
+
+            <div style="margin-top: 32px; text-align: right;">
+                <fluent-button style="width: 100px;" onclick="hideLinuxModal()">取消</fluent-button>
+            </div>
+        </div>
+    </fluent-dialog>
+
     <!-- Fluent UI 模态对话框 - 所有版本 -->
     <fluent-dialog id="downloadModal" modal="true" hidden data-show="false">
         <div style="padding: 32px; min-width: 400px; min-height: 500px;">
@@ -1072,10 +1125,16 @@
                 if (downloadBtnSubtitle) downloadBtnSubtitle.textContent = 'Bloret-Launcher-Setup.exe';
                 if (downloadBtnIcon) downloadBtnIcon.src = '../Windows11.png';
             } else if (isLinux) {
-                downloadBtn.href = `https://gitcode.com/Bloret/Bloret-Launcher/releases/download/${latest}/Bloret-Launcher-${latest}-Linux.zip`;
                 if (downloadBtnText) downloadBtnText.textContent = '下载 Linux 版本';
-                if (downloadBtnSubtitle) downloadBtnSubtitle.textContent = `Bloret-Launcher-${latest}-Linux.zip`;
-                if (downloadBtnIcon) downloadBtnIcon.src = '/res/terminal.svg';
+                if (downloadBtnSubtitle) downloadBtnSubtitle.textContent = '选择您的架构';
+                // Use a terminal icon for Linux
+                if (downloadBtnIcon) downloadBtnIcon.src = '/res/terminal.svg'; 
+                
+                downloadBtn.href = '#';
+                downloadBtn.onclick = (e) => {
+                    e.preventDefault();
+                    showLinuxModal();
+                };
             }
         }
 
@@ -1089,6 +1148,22 @@
 
         function hideMacOSModal() {
             const modal = document.getElementById('macOSModal');
+            if (modal) {
+                modal.setAttribute('data-show', 'false');
+                setTimeout(() => { modal.hidden = true; }, 300);
+            }
+        }
+
+        function showLinuxModal() {
+            const modal = document.getElementById('linuxModal');
+            if (modal) {
+                modal.setAttribute('data-show', 'true');
+                modal.hidden = false;
+            }
+        }
+
+        function hideLinuxModal() {
+            const modal = document.getElementById('linuxModal');
             if (modal) {
                 modal.setAttribute('data-show', 'false');
                 setTimeout(() => { modal.hidden = true; }, 300);
