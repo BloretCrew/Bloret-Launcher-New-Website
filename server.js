@@ -186,6 +186,7 @@ app.get('/api/info', (req, res) => {
       beta: betaInfo,
       downloads: downloads,
       BLTips: config.BLTips || [],
+      backgroundIcons: config.backgroundIcons || [],
       activity: config.activity
     };
     
