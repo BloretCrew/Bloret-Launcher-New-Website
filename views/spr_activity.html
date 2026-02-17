@@ -545,17 +545,17 @@
             fortune: "村庄新人",
             color: "#FFFFFF",
             type: "normal",
-            code: "2026-PEACE" // 对应兑换码后缀
+            code: "2026PEACE" // 对应兑换码后缀
         };
 
         if (counts['star']) {
-            result = { name: "像素巨龙 · 传说", msg: "飞龙在天，万事如意！", fortune: "欧气爆棚", color: "rainbow", type: "dragon", code: "DRAGON-888" };
+            result = { name: "像素巨龙 · 传说", msg: "飞龙在天，万事如意！", fortune: "欧气爆棚", color: "rainbow", type: "dragon", code: "DRAGON888" };
         } else if (counts['enderpearl']) {
-            result = { name: "虚空之眼 · 史诗", msg: "龙行天下，前程似锦", fortune: "末地行者", color: "#008080", type: "pearl", code: "ENDER-LUCK" };
+            result = { name: "虚空之眼 · 史诗", msg: "龙行天下，前程似锦", fortune: "末地行者", color: "#008080", type: "pearl", code: "ENDERLUCK" };
         } else if (counts['gold']) {
-            result = { name: "财源滚滚 · 稀有", msg: "金星溅射，财运亨通", fortune: "多财多亿", color: "#FFD700", type: "gold", code: "GOLD-RICH" };
+            result = { name: "财源滚滚 · 稀有", msg: "金星溅射，财运亨通", fortune: "多财多亿", color: "#FFD700", type: "gold", code: "GOLDRICH" };
         } else if (counts['dye']) {
-            result = { name: "红红火火", msg: "大红灯笼高高挂", fortune: "鸿运当头", color: "#D32F2F", type: "red", code: "RED-LUCKY" };
+            result = { name: "红红火火", msg: "大红灯笼高高挂", fortune: "鸿运当头", color: "#D32F2F", type: "red", code: "REDLUCKY" };
         }
 
         launchFireworks(result);
@@ -573,7 +573,7 @@
         document.getElementById('fortune-word').innerText = resultData.fortune;
         
         // 生成最终兑换码：BL(Bloret Launcher) + 年份 + 类型代码
-        const finalCode = `BL26-${resultData.code}`;
+        const finalCode = `BL26${resultData.code}`;
         document.getElementById('redeem-code-display').innerText = finalCode;
 
         let particles = [];
