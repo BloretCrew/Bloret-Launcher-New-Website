@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        Bloret Launcher - AI 驱动的 Minecraft 启动器
+        <%= title %>
     </title>
     <link rel="icon" href="res/icons/BL.png" type="image/png">
     <script type="module" src="https://unpkg.com/@fluentui/web-components"></script>
@@ -864,11 +864,11 @@
     </style>
 </head>
 
-<body data-bl-latest="">
+<body data-bl-latest="<%= BLLatest %>">
     <!-- 主题切换按钮已移动到顶栏导航中 -->
 
     <!-- 背景图标 -->
-    <div class="background-icons" id="backgroundIcons" data-background-icons='[]'>
+    <div class="background-icons" id="backgroundIcons" data-background-icons='<%- JSON.stringify(backgroundIcons) %>'>
     </div>
 
     <!-- 顶栏导航 -->
@@ -891,14 +891,17 @@
     <div class="container">
         <section class="hero-content">
             <h1>
-                <div class="title-carousel" id="title-carousel">
-                    <div class="title-item active">Bloret Launcher</div>
+                <div class="title-carousel">
+                    <% titles.forEach((title, index)=> { %>
+                        <div class="title-item <%= index === 0 ? 'active' : '' %>">
+                            <%= title %>
+                        </div>
+                        <% }); %>
                 </div>
             </h1>
             <p class="terms" id="app-description">
-                Bloret Launcher - AI 驱动的 Minecraft 启动器
+                <%= Description %>
             </p>
-            <div id="activity-container" style="margin-top: 20px; display: none; text-align: center;"></div>
 
             <div class="download-content-wrapper">
                 <div id="download-buttons" class="download-hero alt-downloads">
@@ -923,8 +926,12 @@
                     <!-- 即使 Bloret Launcher 更新了新版本，通过 Bloret Launcher Setup 安装的版本也是最新版本，无需再次下载 Bloret Launcher Setup 以进行安装。 -->
                 </p>
 
-                <p class="terms" id="version-info">
-                    当前版本: Bloret Launcher
+                <p class="terms">
+                    当前版本: Bloret Launcher <%= BLLatest %>
+                        <% if (Beta && Beta.enabled) { %>
+                            <br>
+                            当前正在测试: Bloret Launcher <%= BetaVersionName %>
+                                <% } %>
                 </p>
 
                 <p id="download-matrix-label" class="hero-alt-download-links">
@@ -948,8 +955,8 @@
             <p style="margin-bottom: 20px; color: var(--text-secondary);">无法自动识别您的 Mac 芯片类型，请手动选择：</p>
 
             <div style="display: flex; flex-direction: column; gap: 15px;">
-                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{VERSION}}/Bloret-Launcher-macOS-ARM.dmg"
-                    class="link-button dlink dynamic-link" style="justify-content: flex-start; padding: 15px 20px;">
+                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-macOS-ARM.dmg"
+                    class="link-button dlink" style="justify-content: flex-start; padding: 15px 20px;">
                     <img class="light-only" src="https://img.bloret.net/SF/macbook" alt="Apple" width="24" height="24">
                     <img class="dark-only" src="https://img.bloret.net/SF/macbook?color=white" alt="Apple" width="24" height="24">
                     <div style="text-align: left; margin-left: 10px;">
@@ -958,8 +965,8 @@
                     </div>
                 </a>
 
-                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{VERSION}}/Bloret-Launcher-macOS-Intel.dmg"
-                    class="link-button dlink dynamic-link" style="justify-content: flex-start; padding: 15px 20px;">
+                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-macOS-Intel.dmg"
+                    class="link-button dlink" style="justify-content: flex-start; padding: 15px 20px;">
                     <img class="light-only" src="https://img.bloret.net/SF/macbook" alt="Intel" width="24" height="24">
                     <img class="dark-only" src="https://img.bloret.net/SF/macbook?color=white" alt="Intel" width="24" height="24">
                     <div style="text-align: left; margin-left: 10px;">
@@ -996,9 +1003,9 @@
                 <div>
                     <h3 style="margin: 0 0 10px 0; font-size: 16px; color: var(--text-primary);">x86_64 / amd64 (常见的 Intel/AMD 处理器)</h3>
                     <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{VERSION}}/Bloret-Launcher_amd64.deb" class="link-button dlink dynamic-link" style="padding: 8px 16px; font-size: 14px;">.deb (Debian/Ubuntu)</a>
-                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{VERSION}}/Bloret-Launcher-1.x86_64.rpm" class="link-button dlink dynamic-link" style="padding: 8px 16px; font-size: 14px;">.rpm (Fedora/RedHat)</a>
-                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{VERSION}}/Bloret-Launcher-Linux-amd64.tar.gz" class="link-button dlink dynamic-link" style="padding: 8px 16px; font-size: 14px;">.tar.gz (通用)</a>
+                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher_amd64.deb" class="link-button dlink" style="padding: 8px 16px; font-size: 14px;">.deb (Debian/Ubuntu)</a>
+                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-1.x86_64.rpm" class="link-button dlink" style="padding: 8px 16px; font-size: 14px;">.rpm (Fedora/RedHat)</a>
+                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-Linux-amd64.tar.gz" class="link-button dlink" style="padding: 8px 16px; font-size: 14px;">.tar.gz (通用)</a>
                     </div>
                 </div>
 
@@ -1006,9 +1013,9 @@
                 <div>
                     <h3 style="margin: 0 0 10px 0; font-size: 16px; color: var(--text-primary);">aarch64 / arm64 (64位 ARM 处理器)</h3>
                     <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{VERSION}}/Bloret-Launcher_arm64.deb" class="link-button dlink dynamic-link" style="padding: 8px 16px; font-size: 14px;">.deb (Debian/Ubuntu)</a>
-                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{VERSION}}/Bloret-Launcher-1.aarch64.rpm" class="link-button dlink dynamic-link" style="padding: 8px 16px; font-size: 14px;">.rpm (Fedora/RedHat)</a>
-                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{VERSION}}/Bloret-Launcher-Linux-arm64.tar.gz" class="link-button dlink dynamic-link" style="padding: 8px 16px; font-size: 14px;">.tar.gz (通用)</a>
+                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher_arm64.deb" class="link-button dlink" style="padding: 8px 16px; font-size: 14px;">.deb (Debian/Ubuntu)</a>
+                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-1.aarch64.rpm" class="link-button dlink" style="padding: 8px 16px; font-size: 14px;">.rpm (Fedora/RedHat)</a>
+                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-Linux-arm64.tar.gz" class="link-button dlink" style="padding: 8px 16px; font-size: 14px;">.tar.gz (通用)</a>
                     </div>
                 </div>
 
@@ -1016,9 +1023,9 @@
                 <div>
                     <h3 style="margin: 0 0 10px 0; font-size: 16px; color: var(--text-primary);">armhf / armv7 (32位 ARM 处理器)</h3>
                     <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{VERSION}}/Bloret-Launcher_armhf.deb" class="link-button dlink dynamic-link" style="padding: 8px 16px; font-size: 14px;">.deb (Debian/Ubuntu)</a>
-                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{VERSION}}/Bloret-Launcher-1.armhf.rpm" class="link-button dlink dynamic-link" style="padding: 8px 16px; font-size: 14px;">.rpm (Fedora/RedHat)</a>
-                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{VERSION}}/Bloret-Launcher-Linux-armhf.tar.gz" class="link-button dlink dynamic-link" style="padding: 8px 16px; font-size: 14px;">.tar.gz (通用)</a>
+                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher_armhf.deb" class="link-button dlink" style="padding: 8px 16px; font-size: 14px;">.deb (Debian/Ubuntu)</a>
+                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-1.armhf.rpm" class="link-button dlink" style="padding: 8px 16px; font-size: 14px;">.rpm (Fedora/RedHat)</a>
+                        <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-Linux-armhf.tar.gz" class="link-button dlink" style="padding: 8px 16px; font-size: 14px;">.tar.gz (通用)</a>
                     </div>
                 </div>
             </div>
@@ -1048,242 +1055,242 @@
                         height="20">
                     <img class="checkmark-icon dark-only" src="../res/checkmark.seal_white.svg" alt="Flask" width="20"
                         height="20">
-                    <span class="version-label">Bloret Launcher</span>
+                    Bloret Launcher <%= BLLatest %>
                 </h3>
                 <a href="https://gitcode.com/Bloret/Bloret-Launcher-Setup/releases/download/26R/Bloret-Launcher-Setup.exe"
                     class="link-button dlink" data-os="win">
                     <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
                     <img src="../res/arrow.down.app.dashed.svg" alt="Windows 11" width="20" height="20">
                     <img src="../res/GitCode.png" alt="Windows 11" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> Setup For Windows (GitCode)
+                    Bloret Launcher <%= BLLatest %> Setup For Windows (GitCode)
                 </a>
                 <a href="https://github.com/BloretCrew/Bloret-Launcher-Setup/releases/latest/download/Bloret-Launcher-Setup.exe"
                     class="link-button dlink" data-os="win">
                     <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
                     <img src="../res/arrow.down.app.dashed.svg" alt="Windows 11" width="20" height="20">
                     <img src="../res/icons/github-mark-white.png" alt="Windows 11" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> Setup For Windows (Github)
+                    Bloret Launcher <%= BLLatest %> Setup For Windows (Github)
                 </a>
-                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{VERSION}}/Bloret-Launcher-Windows.zip"
-                    class="link-button dlink dynamic-link" data-os="win">
+                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-Windows.zip"
+                    class="link-button dlink" data-os="win">
                     <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="Windows 11" width="20" height="20">
                     <img src="../res/GitCode.png" alt="Windows 11" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> zip For Windows (GitCode)
+                    Bloret Launcher <%= BLLatest %> zip For Windows (GitCode)
                 </a>
                 <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/latest/download/Bloret-Launcher-Windows.zip"
                     class="link-button dlink" data-os="win">
                     <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="Windows 11" width="20" height="20">
                     <img src="../res/icons/github-mark-white.png" alt="Windows 11" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> zip For Windows (Github)
+                    Bloret Launcher <%= BLLatest %> zip For Windows (Github)
                 </a>
 
                 <!-- macOS -->
-                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{VERSION}}/Bloret-Launcher-{{VERSION}}-macOS-ARM.dmg"
-                    class="link-button dlink dynamic-link" data-os="mac">
+                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-<%= BLLatest %>-macOS-ARM.dmg"
+                    class="link-button dlink" data-os="mac">
                     <img class="light-only" src="https://img.bloret.net/SF/macbook" alt="macOS" width="20" height="20">
                     <img class="dark-only" src="https://img.bloret.net/SF/macbook?color=white" alt="macOS" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="macOS" width="20" height="20">
                     <img src="../res/GitCode.png" alt="macOS" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> ARM.dmg For macOS (GitCode)
+                    Bloret Launcher <%= BLLatest %> ARM.dmg For macOS (GitCode)
                 </a>
-                <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/latest/download/Bloret-Launcher-{{VERSION}}-macOS-ARM.dmg"
-                    class="link-button dlink dynamic-link" data-os="mac">
+                <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/latest/download/Bloret-Launcher-<%= BLLatest %>-macOS-ARM.dmg"
+                    class="link-button dlink" data-os="mac">
                     <img class="light-only" src="https://img.bloret.net/SF/macbook" alt="macOS" width="20" height="20">
                     <img class="dark-only" src="https://img.bloret.net/SF/macbook?color=white" alt="macOS" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="macOS" width="20" height="20">
                     <img src="../res/icons/github-mark-white.png" alt="macOS" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> ARM.dmg For macOS (Github)
+                    Bloret Launcher <%= BLLatest %> ARM.dmg For macOS (Github)
                 </a>
 
-                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{VERSION}}/Bloret-Launcher-{{VERSION}}-macOS-Intel.dmg"
-                    class="link-button dlink dynamic-link" data-os="mac">
+                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-<%= BLLatest %>-macOS-Intel.dmg"
+                    class="link-button dlink" data-os="mac">
                     <img class="light-only" src="https://img.bloret.net/SF/macbook" alt="macOS" width="20" height="20">
                     <img class="dark-only" src="https://img.bloret.net/SF/macbook?color=white" alt="macOS" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="macOS" width="20" height="20">
                     <img src="../res/GitCode.png" alt="macOS" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> Intel.dmg For macOS (GitCode)
+                    Bloret Launcher <%= BLLatest %> Intel.dmg For macOS (GitCode)
                 </a>
-                <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/latest/download/Bloret-Launcher-{{VERSION}}-macOS-Intel.dmg"
-                    class="link-button dlink dynamic-link" data-os="mac">
+                <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/latest/download/Bloret-Launcher-<%= BLLatest %>-macOS-Intel.dmg"
+                    class="link-button dlink" data-os="mac">
                     <img class="light-only" src="https://img.bloret.net/SF/macbook" alt="macOS" width="20" height="20">
                     <img class="dark-only" src="https://img.bloret.net/SF/macbook?color=white" alt="macOS" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="macOS" width="20" height="20">
                     <img src="../res/icons/github-mark-white.png" alt="macOS" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> Intel.dmg For macOS (Github)
+                    Bloret Launcher <%= BLLatest %> Intel.dmg For macOS (Github)
                 </a>
 
                 <!-- Linux -->
-                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{VERSION}}/Bloret-Launcher_amd64.deb"
-                    class="link-button dlink dynamic-link" data-os="linux">
+                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher_amd64.deb"
+                    class="link-button dlink" data-os="linux">
                     <img src="https://img.bloret.net/img/1771200363890/db97455294ed916e109c580ebe0f8b70" alt="Linux" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="Linux" width="20" height="20">
                     <img src="../res/GitCode.png" alt="Linux" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> amd64.deb For Linux (GitCode)
+                    Bloret Launcher <%= BLLatest %> amd64.deb For Linux (GitCode)
                 </a>
                 <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/latest/download/Bloret-Launcher_amd64.deb"
                     class="link-button dlink" data-os="linux">
                     <img src="https://img.bloret.net/img/1771200363890/db97455294ed916e109c580ebe0f8b70" alt="Linux" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="Linux" width="20" height="20">
                     <img src="../res/icons/github-mark-white.png" alt="Linux" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> amd64.deb For Linux (Github)
+                    Bloret Launcher <%= BLLatest %> amd64.deb For Linux (Github)
                 </a>
 
-                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{VERSION}}/Bloret-Launcher-1.x86_64.rpm"
-                    class="link-button dlink dynamic-link" data-os="linux">
+                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-1.x86_64.rpm"
+                    class="link-button dlink" data-os="linux">
                     <img src="https://img.bloret.net/img/1771200363890/db97455294ed916e109c580ebe0f8b70" alt="Linux" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="Linux" width="20" height="20">
                     <img src="../res/GitCode.png" alt="Linux" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> x86_64.rpm For Linux (GitCode)
+                    Bloret Launcher <%= BLLatest %> x86_64.rpm For Linux (GitCode)
                 </a>
                 <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/latest/download/Bloret-Launcher-1.x86_64.rpm"
                     class="link-button dlink" data-os="linux">
                     <img src="https://img.bloret.net/img/1771200363890/db97455294ed916e109c580ebe0f8b70" alt="Linux" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="Linux" width="20" height="20">
                     <img src="../res/icons/github-mark-white.png" alt="Linux" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> x86_64.rpm For Linux (Github)
+                    Bloret Launcher <%= BLLatest %> x86_64.rpm For Linux (Github)
                 </a>
 
-                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{VERSION}}/Bloret-Launcher-Linux-amd64.tar.gz"
-                    class="link-button dlink dynamic-link" data-os="linux">
+                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-Linux-amd64.tar.gz"
+                    class="link-button dlink" data-os="linux">
                     <img src="https://img.bloret.net/img/1771200363890/db97455294ed916e109c580ebe0f8b70" alt="Linux" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="Linux" width="20" height="20">
                     <img src="../res/GitCode.png" alt="Linux" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> amd64.tar.gz For Linux (GitCode)
+                    Bloret Launcher <%= BLLatest %> amd64.tar.gz For Linux (GitCode)
                 </a>
                 <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/latest/download/Bloret-Launcher-Linux-amd64.tar.gz"
                     class="link-button dlink" data-os="linux">
                     <img src="https://img.bloret.net/img/1771200363890/db97455294ed916e109c580ebe0f8b70" alt="Linux" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="Linux" width="20" height="20">
                     <img src="../res/icons/github-mark-white.png" alt="Linux" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> amd64.tar.gz For Linux (Github)
+                    Bloret Launcher <%= BLLatest %> amd64.tar.gz For Linux (Github)
                 </a>
 
-                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{VERSION}}/Bloret-Launcher_arm64.deb"
-                    class="link-button dlink dynamic-link" data-os="linux">
+                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher_arm64.deb"
+                    class="link-button dlink" data-os="linux">
                     <img src="https://img.bloret.net/img/1771200363890/db97455294ed916e109c580ebe0f8b70" alt="Linux" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="Linux" width="20" height="20">
                     <img src="../res/GitCode.png" alt="Linux" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> arm64.deb For Linux (GitCode)
+                    Bloret Launcher <%= BLLatest %> arm64.deb For Linux (GitCode)
                 </a>
                 <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/latest/download/Bloret-Launcher_arm64.deb"
                     class="link-button dlink" data-os="linux">
                     <img src="https://img.bloret.net/img/1771200363890/db97455294ed916e109c580ebe0f8b70" alt="Linux" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="Linux" width="20" height="20">
                     <img src="../res/icons/github-mark-white.png" alt="Linux" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> arm64.deb For Linux (Github)
+                    Bloret Launcher <%= BLLatest %> arm64.deb For Linux (Github)
                 </a>
 
-                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{VERSION}}/Bloret-Launcher-1.aarch64.rpm"
-                    class="link-button dlink dynamic-link" data-os="linux">
+                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-1.aarch64.rpm"
+                    class="link-button dlink" data-os="linux">
                     <img src="https://img.bloret.net/img/1771200363890/db97455294ed916e109c580ebe0f8b70" alt="Linux" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="Linux" width="20" height="20">
                     <img src="../res/GitCode.png" alt="Linux" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> aarch64.rpm For Linux (GitCode)
+                    Bloret Launcher <%= BLLatest %> aarch64.rpm For Linux (GitCode)
                 </a>
                 <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/latest/download/Bloret-Launcher-1.aarch64.rpm"
                     class="link-button dlink" data-os="linux">
                     <img src="https://img.bloret.net/img/1771200363890/db97455294ed916e109c580ebe0f8b70" alt="Linux" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="Linux" width="20" height="20">
                     <img src="../res/icons/github-mark-white.png" alt="Linux" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> aarch64.rpm For Linux (Github)
+                    Bloret Launcher <%= BLLatest %> aarch64.rpm For Linux (Github)
                 </a>
 
-                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{VERSION}}/Bloret-Launcher-Linux-arm64.tar.gz"
-                    class="link-button dlink dynamic-link" data-os="linux">
+                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-Linux-arm64.tar.gz"
+                    class="link-button dlink" data-os="linux">
                     <img src="https://img.bloret.net/img/1771200363890/db97455294ed916e109c580ebe0f8b70" alt="Linux" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="Linux" width="20" height="20">
                     <img src="../res/GitCode.png" alt="Linux" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> arm64.tar.gz For Linux (GitCode)
+                    Bloret Launcher <%= BLLatest %> arm64.tar.gz For Linux (GitCode)
                 </a>
                 <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/latest/download/Bloret-Launcher-Linux-arm64.tar.gz"
                     class="link-button dlink" data-os="linux">
                     <img src="https://img.bloret.net/img/1771200363890/db97455294ed916e109c580ebe0f8b70" alt="Linux" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="Linux" width="20" height="20">
                     <img src="../res/icons/github-mark-white.png" alt="Linux" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> arm64.tar.gz For Linux (Github)
+                    Bloret Launcher <%= BLLatest %> arm64.tar.gz For Linux (Github)
                 </a>
 
-                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{VERSION}}/Bloret-Launcher_armhf.deb"
-                    class="link-button dlink dynamic-link" data-os="linux">
+                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher_armhf.deb"
+                    class="link-button dlink" data-os="linux">
                     <img src="https://img.bloret.net/img/1771200363890/db97455294ed916e109c580ebe0f8b70" alt="Linux" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="Linux" width="20" height="20">
                     <img src="../res/GitCode.png" alt="Linux" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> armhf.deb For Linux (GitCode)
+                    Bloret Launcher <%= BLLatest %> armhf.deb For Linux (GitCode)
                 </a>
                 <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/latest/download/Bloret-Launcher_armhf.deb"
                     class="link-button dlink" data-os="linux">
                     <img src="https://img.bloret.net/img/1771200363890/db97455294ed916e109c580ebe0f8b70" alt="Linux" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="Linux" width="20" height="20">
                     <img src="../res/icons/github-mark-white.png" alt="Linux" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> armhf.deb For Linux (Github)
+                    Bloret Launcher <%= BLLatest %> armhf.deb For Linux (Github)
                 </a>
 
-                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{VERSION}}/Bloret-Launcher-1.armhf.rpm"
-                    class="link-button dlink dynamic-link" data-os="linux">
+                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-1.armhf.rpm"
+                    class="link-button dlink" data-os="linux">
                     <img src="https://img.bloret.net/img/1771200363890/db97455294ed916e109c580ebe0f8b70" alt="Linux" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="Linux" width="20" height="20">
                     <img src="../res/GitCode.png" alt="Linux" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> armhf.rpm For Linux (GitCode)
+                    Bloret Launcher <%= BLLatest %> armhf.rpm For Linux (GitCode)
                 </a>
                 <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/latest/download/Bloret-Launcher-1.armhf.rpm"
                     class="link-button dlink" data-os="linux">
                     <img src="https://img.bloret.net/img/1771200363890/db97455294ed916e109c580ebe0f8b70" alt="Linux" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="Linux" width="20" height="20">
                     <img src="../res/icons/github-mark-white.png" alt="Linux" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> armhf.rpm For Linux (Github)
+                    Bloret Launcher <%= BLLatest %> armhf.rpm For Linux (Github)
                 </a>
 
-                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{VERSION}}/Bloret-Launcher-Linux-armhf.tar.gz"
-                    class="link-button dlink dynamic-link" data-os="linux">
+                <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BLLatest %>/Bloret-Launcher-Linux-armhf.tar.gz"
+                    class="link-button dlink" data-os="linux">
                     <img src="https://img.bloret.net/img/1771200363890/db97455294ed916e109c580ebe0f8b70" alt="Linux" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="Linux" width="20" height="20">
                     <img src="../res/GitCode.png" alt="Linux" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> armhf.tar.gz For Linux (GitCode)
+                    Bloret Launcher <%= BLLatest %> armhf.tar.gz For Linux (GitCode)
                 </a>
                 <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/latest/download/Bloret-Launcher-Linux-armhf.tar.gz"
                     class="link-button dlink" data-os="linux">
                     <img src="https://img.bloret.net/img/1771200363890/db97455294ed916e109c580ebe0f8b70" alt="Linux" width="20" height="20">
                     <img src="../res/shippingbox.svg" alt="Linux" width="20" height="20">
                     <img src="../res/icons/github-mark-white.png" alt="Linux" width="20" height="20">
-                    Bloret Launcher <span class="version-text"></span> armhf.tar.gz For Linux (Github)
+                    Bloret Launcher <%= BLLatest %> armhf.tar.gz For Linux (Github)
                 </a>
 
-                <div id="beta-downloads" style="display: none;">
-                    <h3 style="margin-top: 20px; margin-bottom: 20px; color: var(--text-primary);">
+                <% if (Beta && Beta.enabled) { %>
+                    <h3 style="margin-top: 20px; margin-bottom: 20px; color: #333;">
                         <img src="../res/flask.svg" alt="Flask" width="20" height="20">
-                        Bloret Launcher <span class="beta-version-name"></span>
+                        Bloret Launcher <%= BetaVersionName %>
                     </h3>
-                    <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{BETA_VERSION}}/Bloret-Launcher-Setup.exe"
-                        class="link-button dlink dynamic-beta-link" data-os="win">
+                    <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BetaVersion %>/Bloret-Launcher-Setup.exe"
+                        class="link-button dlink" data-os="win">
                         <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
                         <img src="../res/arrow.down.app.dashed.svg" alt="Windows 11" width="20" height="20">
                         <img src="../res/GitCode.png" alt="Windows 11" width="20" height="20">
-                        Bloret Launcher <span class="beta-version-name"></span> Setup For Windows (GitCode)
+                        Bloret Launcher <%= BetaVersionName %> Setup For Windows (GitCode)
                     </a>
-                    <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/download/{{BETA_VERSION}}/Bloret-Launcher-Setup.exe"
-                        class="link-button dlink dynamic-beta-link" data-os="win">
+                    <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/download/<%= BetaVersion %>/Bloret-Launcher-Setup.exe"
+                        class="link-button dlink" data-os="win">
                         <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
                         <img src="../res/arrow.down.app.dashed.svg" alt="Windows 11" width="20" height="20">
                         <img src="../res/icons/github-mark-white.png" alt="Windows 11" width="20" height="20">
-                        Bloret Launcher <span class="beta-version-name"></span> Setup For Windows (Github)
+                        Bloret Launcher <%= BetaVersionName %> Setup For Windows (Github)
                     </a>
-                    <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/{{BETA_VERSION}}/Bloret-Launcher-Windows.zip"
-                        class="link-button dlink dynamic-beta-link" data-os="win">
+                    <a href="https://gitcode.com/Bloret/Bloret-Launcher/releases/download/<%= BetaVersion %>/Bloret-Launcher-Windows.zip"
+                        class="link-button dlink" data-os="win">
                         <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
                         <img src="../res/shippingbox.svg" alt="Windows 11" width="20" height="20">
                         <img src="../res/GitCode.png" alt="Windows 11" width="20" height="20">
-                        Bloret Launcher <span class="beta-version-name"></span> zip For Windows (GitCode)
+                        Bloret Launcher <%= BetaVersionName %> zip For Windows (GitCode)
                     </a>
-                    <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/download/{{BETA_VERSION}}/Bloret-Launcher-Windows.zip"
-                        class="link-button dlink dynamic-beta-link" data-os="win">
+                    <a href="https://github.com/BloretCrew/Bloret-Launcher/releases/download/<%= BetaVersion %>/Bloret-Launcher-Setup.exe"
+                        class="link-button dlink" data-os="win">
                         <img src="../Windows11.png" alt="Windows 11" width="20" height="20">
                         <img src="../res/shippingbox.svg" alt="Windows 11" width="20" height="20">
                         <img src="../res/icons/github-mark-white.png" alt="Windows 11" width="20" height="20">
-                        Bloret Launcher <span class="beta-version-name"></span> zip For Windows (Github)
+                        Bloret Launcher <%= BetaVersionName %> zip For Windows (Github)
                     </a>
-                </div>
+                    <% } %>
             </div>
 
             <div style="margin-top: 32px; text-align: right;">
@@ -1343,11 +1350,7 @@
                     });
                 }
             } else if (isWin) {
-                if (latest) {
-                    downloadBtn.href = `https://gitcode.com/Bloret/Bloret-Launcher-Setup/releases/download/${latest}/Bloret-Launcher-Setup.exe`;
-                } else {
-                    downloadBtn.href = 'https://gitcode.com/Bloret/Bloret-Launcher-Setup/releases/download/26R/Bloret-Launcher-Setup.exe';
-                }
+                downloadBtn.href = 'https://gitcode.com/Bloret/Bloret-Launcher-Setup/releases/download/26R/Bloret-Launcher-Setup.exe';
                 if (downloadBtnText) downloadBtnText.textContent = '下载 Windows 版本';
                 if (downloadBtnSubtitle) downloadBtnSubtitle.textContent = 'Bloret-Launcher-Setup.exe';
                 if (downloadBtnIcon) downloadBtnIcon.src = '../Windows11.png';
@@ -1498,30 +1501,24 @@
         });
 
         // 背景图标动画 - 分批创建以避免初始堆积
-        function createFloatingIcons(iconsList) {
+        function createFloatingIcons() {
             const iconsContainer = document.getElementById('backgroundIcons');
             if (!iconsContainer) return;
             console.log('创建背景图标，容器:', iconsContainer);
 
-            // 优先使用传入的图标列表，否则尝试从属性获取
-            let icons = iconsList;
-            if (!icons || !Array.isArray(icons)) {
-                try {
-                    icons = JSON.parse(iconsContainer.getAttribute('data-background-icons') || '[]');
-                } catch (e) {
-                    console.error('Failed to parse background icons:', e);
-                    icons = [];
-                }
+            // 从数据属性获取图标列表
+            let icons = [];
+            try {
+                icons = JSON.parse(iconsContainer.getAttribute('data-background-icons') || '[]');
+            } catch (e) {
+                console.error('Failed to parse background icons:', e);
             }
-            console.log('获取到图标列表:', icons);
+            console.log('从属性获取到图标列表:', icons);
 
             if (!icons || icons.length === 0) {
                 console.warn('没有可用的图标，背景动画将不会显示');
                 return;
             }
-
-            // 清空现有图标（如果有）
-            iconsContainer.innerHTML = '';
 
             const iconSizes = ['small', 'medium', 'large'];
             const numberOfIcons = 25; // 图标数量
@@ -1570,8 +1567,8 @@
             }, 1000); // 每1秒创建一批
         }
 
-        // 页面加载完成后创建背景图标 - 移除，改为由 fetchAndUpdateInfo 调用
-        // document.addEventListener('DOMContentLoaded', createFloatingIcons);
+        // 页面加载完成后创建背景图标
+        document.addEventListener('DOMContentLoaded', createFloatingIcons);
 
         // 显示下载模态对话框
         function showDownloadModal(event) {
@@ -1664,51 +1661,9 @@
                         versionInfoEl.innerHTML = html;
                     }
                     
-                    // Update Body Dataset and Version Placeholders
+                    // Update Body Dataset
                     if (data.latestVersion) {
                         document.body.dataset.blLatest = data.latestVersion;
-                        
-                        // Update version text spans
-                        document.querySelectorAll('.version-text').forEach(el => {
-                            el.textContent = data.latestVersion;
-                        });
-
-                        // Update dynamic links with version
-                        document.querySelectorAll('.dynamic-link').forEach(link => {
-                            // Check raw attribute first to preserve template
-                            const rawHref = link.getAttribute('href');
-                            if (rawHref && rawHref.includes('{{VERSION}}')) {
-                                link.href = rawHref.replace(/{{VERSION}}/g, data.latestVersion);
-                            }
-                        });
-                    }
-
-                    // Handle Beta Section
-                    const betaContainer = document.getElementById('beta-downloads');
-                    if (betaContainer) {
-                        if (data.beta && data.beta.enabled) {
-                            betaContainer.style.display = 'block';
-                            
-                            // Update beta version name text
-                            document.querySelectorAll('.beta-version-name').forEach(el => {
-                                el.textContent = data.beta.versionName;
-                            });
-
-                            // Update beta links
-                            document.querySelectorAll('.dynamic-beta-link').forEach(link => {
-                                const rawHref = link.getAttribute('href');
-                                if (rawHref && rawHref.includes('{{BETA_VERSION}}')) {
-                                    link.href = rawHref.replace(/{{BETA_VERSION}}/g, data.beta.version);
-                                }
-                            });
-                        } else {
-                            betaContainer.style.display = 'none';
-                        }
-                    }
-
-                    // Update Background Icons
-                    if (data.backgroundIcons && Array.isArray(data.backgroundIcons)) {
-                         createFloatingIcons(data.backgroundIcons);
                     }
 
                     // Update Activity
