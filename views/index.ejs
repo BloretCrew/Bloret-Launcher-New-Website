@@ -804,6 +804,63 @@
         [data-theme="dark"] .dark-only {
             display: inline-block;
         }
+
+        /* Activity Card */
+        .activity-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            max-width: 600px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin: 0 auto;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            border-color: var(--link-color);
+        }
+
+        .activity-card img {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .activity-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+        
+        [data-theme="dark"] .activity-card {
+             background: rgba(255, 255, 255, 0.05);
+        }
     </style>
 </head>
 
@@ -842,7 +899,7 @@
                         <% }); %>
                 </div>
             </h1>
-            <p class="terms">
+            <p class="terms" id="app-description">
                 <%= Description %>
             </p>
 
@@ -1426,7 +1483,7 @@
             let currentIndex = 0;
 
             // 每 3 秒切换一次标题
-            setInterval(() => {
+            window.titleCarouselInterval = setInterval(() => {
                 // 淡出当前标题
                 titleItems[currentIndex].classList.remove('active');
 
@@ -1565,6 +1622,116 @@
         document.querySelector('#downloadModal > div').addEventListener('click', function (e) {
             e.stopPropagation();
         });
+
+        // Fetch API Info and Update Page
+        function fetchAndUpdateInfo() {
+            fetch('/api/info')
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Fetched info:', data);
+                    
+                    // Update Description
+                    const descEl = document.getElementById('app-description');
+                    if (descEl && data.description) {
+                        descEl.textContent = data.description;
+                    }
+
+                    // Update Titles (BLTips)
+                    const carousel = document.querySelector('.title-carousel');
+                    if (carousel && data.BLTips && Array.isArray(data.BLTips) && data.BLTips.length > 0) {
+                        // Rebuild carousel items
+                        let html = '';
+                        data.BLTips.forEach((tip, index) => {
+                            html += `<div class="title-item ${index === 0 ? 'active' : ''}">${tip}</div>`;
+                        });
+                        carousel.innerHTML = html;
+                        restartCarousel();
+                    }
+
+                    // Update Version Info
+                    const versionInfoEl = document.getElementById('version-info');
+                    if (versionInfoEl) {
+                        let html = `当前版本: Bloret Launcher ${data.latestVersion}`;
+                        if (data.beta && data.beta.enabled) {
+                            html += `<br>当前正在测试: Bloret Launcher ${data.beta.versionName}`;
+                        }
+                        versionInfoEl.innerHTML = html;
+                    }
+                    
+                    // Update Body Dataset
+                    if (data.latestVersion) {
+                        document.body.dataset.blLatest = data.latestVersion;
+                    }
+
+                    // Update Activity
+                    const activityContainer = document.getElementById('activity-container');
+                    if (activityContainer) {
+                        if (data.activity && data.activity.show) {
+                            // Trim backticks if present in icon/link
+                            const iconUrl = data.activity.icon ? data.activity.icon.replace(/`/g, '').trim() : '';
+                            const linkUrl = data.activity.link ? data.activity.link.replace(/`/g, '').trim() : '#';
+                            
+                            activityContainer.innerHTML = `
+                                <div class="activity-card" onclick="window.open('${linkUrl}', '_blank')">
+                                    <img src="${iconUrl}" alt="Activity Icon">
+                                    <div class="activity-content">
+                                        <div class="activity-title">${data.activity.title}</div>
+                                        <div class="activity-desc">${data.activity.description}</div>
+                                        <div class="activity-time">${data.activity.time}</div>
+                                    </div>
+                                </div>
+                            `;
+                            activityContainer.style.display = 'block';
+                        } else {
+                            activityContainer.style.display = 'none';
+                        }
+                    }
+
+                    // Re-run OS detection to update links with new version
+                    detectOSAndSetLink();
+                    
+                    // Also specifically update the Windows download link if available in data
+                    // This overrides the hardcoded fallback in detectOSAndSetLink if on Windows
+                    const winBtn = document.getElementById('download-buttons-win');
+                    const isWin = navigator.platform.indexOf('Win') !== -1;
+                    if (winBtn && isWin && data.downloads && data.downloads.stable && data.downloads.stable.gitcode) {
+                         const exeUrl = data.downloads.stable.gitcode.exe.replace(/`/g, '').trim();
+                         winBtn.href = exeUrl;
+                         const subtitle = winBtn.querySelector('.link-subtitle');
+                         if (subtitle) {
+                             const filename = exeUrl.split('/').pop();
+                             subtitle.textContent = filename;
+                         }
+                    }
+
+                })
+                .catch(error => console.error('Error fetching info:', error));
+        }
+
+        // Helper to restart carousel
+        function restartCarousel() {
+            if (window.titleCarouselInterval) clearInterval(window.titleCarouselInterval);
+            
+            const titleItems = document.querySelectorAll('.title-item');
+            if (titleItems.length === 0) return;
+            
+            let currentIndex = 0;
+            titleItems.forEach((item, index) => {
+                if (item.classList.contains('active')) currentIndex = index;
+            });
+
+            window.titleCarouselInterval = setInterval(() => {
+                titleItems[currentIndex].classList.remove('active');
+                currentIndex = (currentIndex + 1) % titleItems.length;
+                titleItems[currentIndex].classList.add('active');
+            }, 3000);
+        }
+
+        // Call fetch on load
+        document.addEventListener('DOMContentLoaded', fetchAndUpdateInfo);
     </script>
 </body>
 
