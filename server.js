@@ -77,7 +77,8 @@ app.get('/', (req, res) => {
     BetaVersionName: config.Beta.versionName,
     BetaDescription: config.Beta.description,
     Beta: config.Beta,
-    backgroundIcons: config.backgroundIcons || []
+    backgroundIcons: config.backgroundIcons || [],
+    activity: config.activity
   });
 });
 app.get('/spr_activity', (req, res) => {
