@@ -1,6 +1,6 @@
 {
   "github_key": "S7wZ4p5c5FMVpE906zqWlpVf2",
-  "BLLatest": "26RC",
+  "BLLatest": "26",
   "Description": "Conveniently manage your Minecraft, conveniently play Bloret. 便捷地管理你的 Minecraft，便捷地游玩 Bloret。",
   "BLNewVersionDescription": "Bloret Launcher 迎来重大更新，核心亮点在于引入了 Bloriko AI 智能助手，支持自然语言推荐 Mod 与深度问答；联机模块重构为基于 Easytier 的虚拟组网服务，大幅简化多人游戏连接；新增实用工具如全局截图（支持快捷键）和 Minecraft 悬浮工具栏 ；同时，通行证系统升级支持 2FA 双重验证与账户云端同步，配合底层架构优化及 UI 的 Fluent 风格焕新，全面提升了启动器的智能化与易用性。",
   "Beta":{
@@ -35,13 +35,20 @@
     "是受 Bloret 支持的 Minecraft 启动器",
     "最贴近 Windows 11 设计的 Minecraft 启动器",
     "集成 Modrinth、Easyiter 以及 Bloret 服务",
-    "现代化的 Minecraft 启动器"
+    "现代化的 Minecraft 启动器",
+    "王",
+    "何意味",
+    "原神所致。",
+    "可以启动 原神。",
+    "可以启动 崩坏：星穹铁道。",
+    "可以启动 绝区零。",
+    "什么都可以启动其实"
   ],
   "activity":{
     "show": true,
     "status": "ongoing",
     "title": "Bloret Launcher 春节小游戏",
-    "description": "完成一个简单的小游戏（大约半分钟），感受春节氛围，可获得至少 30 络琅奖励！",
+    "description": "完成一个简单的小游戏（大约半分钟），感受春节氛围，可获得最多 50 络琅 + 200 金币奖励！",
     "icon": "https://img.bloret.net/img/1769925156328/79a6037022aeb4ee9e71bf1fd85db271",
     "time": "2026-02-14 到 2026-03-03",
     "link": "https://launcher.bloret.net/spr_activity"
