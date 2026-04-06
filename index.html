@@ -1,12 +1,124 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bloret Launcher - AI 驱动的 Minecraft 启动器</title>
-    <link rel="icon" href="res/icons/BL.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="Designs/The-Navbar-Design.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <!-- YAML 解析库 -->
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
 </head>
 <body>
-    <script src="index.js"></script>
+    <video class="bg-video" autoplay muted loop playsinline>
+        <source src="res/back.mp4" type="video/mp4" />
+    </video>
+
+    <video class="reference-video" id="reference-video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+        <source src="20260328-225252.mp4" type="video/mp4" />
+    </video>
+
+    <div class="video-overlay" aria-hidden="true"></div>
+
+    <!-- 固定顶栏 -->
+    <header class="navbar" aria-label="Main navigation">
+        <div class="navbar-content">
+            <div class="navbar-brand">
+                <img src="bloret.png" alt="Bloret" class="navbar-logo" width="28" height="28">
+                <span class="navbar-title">Bloret Launcher</span>
+            </div>
+            <nav class="navbar-nav">
+                <a class="nav-link" href="https://bloret.net" target="_blank" rel="noopener">bloret.net</a>
+                <button class="nav-link passport-outline" onclick="openDownloadModal()" type="button">其他操作系统</button>
+                <button class="nav-link passport" id="nav-download-btn" onclick="openDownloadModalForCurrentOS()" type="button">下载</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 分页导航指示器 -->
+    <nav class="pagination-nav" aria-label="Page navigation">
+        <div class="pagination-dots">
+            <button class="pagination-dot active" data-page="0" aria-label="Go to page 1"></button>
+            <button class="pagination-dot" data-page="1" aria-label="Go to page 2"></button>
+        </div>
+    </nav>
+
+    <!-- 分页容器 -->
+    <div class="pages-container" id="pages-container">
+        <!-- 第一页：Hero + 下载区域 -->
+        <section class="page page-1 active" data-page="0">
+
+            <main class="hero">
+                <div class="hero-copy" aria-label="Hero section">
+                    <div class="lyric-player" aria-label="Karaoke title animation" id="title-player">
+                        <div class="lyric-stage" id="lyric-stage">
+                            <p class="lyric-line lyric-line-main" id="lyric-line-1" aria-live="polite"></p>
+                            <p class="lyric-line lyric-line-main" id="lyric-line-2"></p>
+                            <p class="lyric-sub" id="lyric-sub"></p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- 左下角下载面板 -->
+            <div class="download-dock" id="download-dock">
+                <div class="dock-content">
+                    <div class="dock-info">
+                        <span class="dock-title">Bloret Launcher</span>
+                        <span class="dock-version" id="dock-version">v26</span>
+                    </div>
+                    <div class="dock-buttons-row">
+                        <button class="dock-btn-primary" id="dock-primary_btn" type="button">
+                            <!-- 由 JS 动态设置 -->
+                        </button>
+                        <button class="dock-btn-secondary" id="dock_other_btn" onclick="openDownloadModal()" type="button">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 9l6 6 6-6"/>
+                            </svg>
+                            其他系统
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 下载模态对话框 -->
+            <div class="modal-overlay" id="download-modal" onclick="closeDownloadModal(event)">
+                <div class="modal-content" onclick="event.stopPropagation()">
+                    <button class="modal-close" onclick="closeDownloadModal()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 6L6 18M6 6l12 12"/>
+                        </svg>
+                    </button>
+                    <h3 class="modal-title">选择下载平台</h3>
+                    <div class="modal-buttons" id="modal-buttons">
+                        <!-- 由 JS 动态生成 -->
+                    </div>
+                    <div class="modal-links" id="modal-links">
+                        <!-- 由 JS 动态生成 -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第二页：核心功能 - Launcher 特性 -->
+        <section class="page page-2" data-page="1">
+            <div class="page-content">
+                <h2 class="page-title">核心功能</h2>
+                <p class="page-subtitle">为什么选择 Bloret Launcher</p>
+
+                <div class="features-grid" id="launcher-features">
+                    <!-- 由 JS 动态生成 -->
+                </div>
+                
+                <!-- 编辑器展示 -->
+                <div class="editor-showcase" id="editor-showcase"></div>
+            </div>
+        </section>
+    </div>
+
+    <script src="script-new.js"></script>
 </body>
 </html>
