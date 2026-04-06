@@ -1,7 +1,6 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-const favicon = require('serve-favicon');
 
 const app = express();
 app.set('trust proxy', true); // 信任 Nginx 反向代理，确保正确识别 https 协议
@@ -14,7 +13,7 @@ app.use((req, res, next) => {
   const method = req.method;
   const url = req.originalUrl;
   const userAgent = req.get('User-Agent') || 'Unknown';
-  
+
   console.log(`[${timestamp}] ${ip} ${method} ${url} - ${userAgent}`);
   next();
 });
@@ -24,12 +23,9 @@ function readConfig(){
   return JSON.parse(fs.readFileSync(path.join(__dirname, 'config.json'), 'utf8'));
 }
 
-// 设置模板引擎
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
 // 设置静态文件目录
-app.use(express.static(path.join(__dirname, 'public')));
+// 开放根目录下的新网站静态文件 (script-new.js, styles.css, custom.yaml, images, etc.)
+app.use(express.static(__dirname));
 
 // 开放整个 res 文件夹到 /res 路径
 app.use('/res', express.static(path.join(__dirname, 'res')));
@@ -56,7 +52,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// 显式处理 favicon.ico 请求，防止 Safari 因获取不到图标而报错
+// 显式处理 favicon.ico 请求
 app.get('/favicon.ico', (req, res) => {
   const faviconPath = path.join(__dirname, 'res', 'icons', 'BL.png');
   if (fs.existsSync(faviconPath)) {
@@ -68,21 +64,10 @@ app.get('/favicon.ico', (req, res) => {
 
 // 路由
 app.get('/', (req, res) => {
-  const config = readConfig();
-  res.render('index', {
-    title: 'Bloret Launcher - AI 驱动的 Minecraft 启动器',
-    titles: config.titles,
-    BLLatest: config.BLLatest,
-    BLNewVersionDescription: config.BLNewVersionDescription,
-    Description: config.Description,
-    BetaVersion: config.Beta.version,
-    BetaVersionName: config.Beta.versionName,
-    BetaDescription: config.Beta.description,
-    Beta: config.Beta,
-    backgroundIcons: config.backgroundIcons || [],
-    activity: config.activity
-  });
+  // 发送新的 index.html
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
+
 app.get('/spr_activity', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'spr_activity.html'));
 });
@@ -111,32 +96,12 @@ server.on('error', (err) => {
     console.error(err);
   }
 });
-app.get('/Windows11.png', (req, res) => {
-  const filePath = path.join(__dirname, 'Windows11.png');
-  res.sendFile(filePath);
-});
-
-app.get('/BLlight.png', (req, res) => {
-  const filePath = path.join(__dirname, 'BLlight.png');
-  res.sendFile(filePath);
-});
-
-app.get('/BL.png', (req, res) => {
-  const filePath = path.join(__dirname, 'BL.png');
-  res.sendFile(filePath);
-});
-
-
-// 测试背景图标的页面
-app.get('/test-bg', (req, res) => {
-  res.sendFile(path.join(__dirname, 'test-background.html'));
-});
 
 // 获取 Bloret Launcher 配置信息的 API
 app.get('/api/info', (req, res) => {
   try {
     const config = readConfig();
-    
+
     // 构建测试版信息
     let betaInfo;
     if (config.Beta.enabled){
@@ -153,7 +118,7 @@ app.get('/api/info', (req, res) => {
 
     // 构建下载地址信息
     let downloads = {};
-    
+
     // 正式版下载地址
     if (config.BLLatest) {
       downloads.stable = {
@@ -167,7 +132,7 @@ app.get('/api/info', (req, res) => {
         }
       };
     }
-    
+
     // 测试版下载地址
     if (config.Beta.enabled && config.Beta.version) {
       downloads.beta = {
@@ -191,9 +156,9 @@ app.get('/api/info', (req, res) => {
       BLTips: config.BLTips || [],
       activity: config.activity
     };
-    
+
     res.json(blInfo);
-    
+
   } catch (error) {
     console.error('Error reading config for /api/info:', error);
     res.status(500).json({
