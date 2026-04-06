@@ -125,13 +125,25 @@
         el.innerHTML = '';
         const spans = [];
         text.split('').forEach(char => {
+            // 处理换行符
+            if (char === '\n') {
+                const br = document.createElement('br');
+                el.appendChild(br);
+                return;
+            }
+
             const span = document.createElement('span');
-            // 空格使用普通空格（允许换行），非空格字符保持原样
             const isSpace = char === ' ';
             const content = isSpace ? ' ' : char;
             span.textContent = content;
             span.className = 'lyric-char' + (isSpace ? ' lyric-space' : '');
             span.setAttribute('data-char', isSpace ? '\u00A0' : content);
+            
+            // 防止单词截断：非空格字符不换行
+            if (!isSpace) {
+                span.style.whiteSpace = 'nowrap';
+            }
+            
             el.appendChild(span);
             spans.push(span);
         });
@@ -476,15 +488,6 @@
         // 不再动态生成导航栏，使用 HTML 中手动设置的按钮
         // 只更新顶栏下载按钮文字（如果配置已加载）
         updateNavDownloadButton();
-    }
-
-    // 检测用户操作系统
-    function detectUserOS() {
-        const userAgent = window.navigator.userAgent.toLowerCase();
-        if (userAgent.indexOf('win') !== -1) return 'windows';
-        if (userAgent.indexOf('mac') !== -1) return 'macos';
-        if (userAgent.indexOf('linux') !== -1) return 'linux';
-        return 'unknown';
     }
 
     // 更新顶栏下载按钮文字

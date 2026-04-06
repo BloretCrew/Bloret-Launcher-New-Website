@@ -57,7 +57,7 @@ body {
 }
 
 .hero-copy {
-    width: min(1200px, 100%);
+    width: min(1400px, 100%);
     margin: 0 auto;
     overflow: visible;
     /* 允许发光和弹跳超出边界 */
@@ -66,7 +66,7 @@ body {
 .lyric-stage {
     position: relative;
     height: calc(100vh - 120px);
-    margin-left: -2vw;
+    margin-left: 0;
 }
 
 .lyric-line {
@@ -77,10 +77,11 @@ body {
     left: 0;
     margin: 0;
     width: fit-content;
-    max-width: 85vw; /* 允许在屏幕 85% 宽度处换行 */
+    max-width: 95vw; /* 允许在屏幕 95% 宽度处换行 */
     white-space: normal; /* 允许换行 */
     word-break: keep-all; /* 保持单词完整，不在单词中间断开 */
-    overflow-wrap: break-word; /* 仅当单词超出容器时才断开 */
+    overflow-wrap: normal; /* 防止强制截断长单词 */
+    hyphens: none; /* 禁用自动连字符 */
     line-height: 1.15; /* 适当增加行高，防止重叠 */
     font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
     font-weight: 900;
@@ -197,6 +198,11 @@ body {
     white-space: normal;
     /* 保持一定的宽度以显示空格 */
     min-width: 0.25em;
+}
+
+/* 单词容器：保持完整不截断 */
+.lyric-char.lyric-word {
+    white-space: nowrap;
 }
 
 /* 字符高亮层：纯净无阴影，仅白色发光 */

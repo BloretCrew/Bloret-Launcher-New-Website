@@ -24,14 +24,14 @@ navbar:
 hero:
   # 标题动画列表（循环播放）
   titles:
-    - main: "AI 驱动的 Minecraft 启动器"
-      sub: "Bloret Launcher - 现代化启动器体验"
-    - main: "完全开源的 Minecraft 启动器"
-      sub: "开源、免费、可信赖"
-    - main: "受 Bloret 支持的 Minecraft 启动器"
-      sub: "专为 Bloret 玩家打造"
-    - main: "最贴近 Windows 11 设计的 Minecraft 启动器"
-      sub: "Fluent Design 风格焕新"
+    - main: "AI-powered Minecraft Launcher"
+      sub: "AI 驱动的 Minecraft 启动器"
+    - main: "A completely open-source\nMinecraft Launcher"
+      sub: "完全开源的 Minecraft 启动器"
+    - main: "Bloret-powered\nMinecraft Launcher"
+      sub: "受 Bloret 支持的 Minecraft 启动器"
+    - main: "The Minecraft Launcher most closely resembling the design of\nWindows 11"
+      sub: "最贴近 Windows 11 设计的 Minecraft 启动器"
   # 滚动提示文字
   scrollHint: "向下滚动探索"
   # Launcher 功能特性
