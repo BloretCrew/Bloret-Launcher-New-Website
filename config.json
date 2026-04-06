@@ -45,7 +45,7 @@
     "什么都可以启动其实"
   ],
   "activity":{
-    "show": true,
+    "show": false,
     "status": "ongoing",
     "title": "Bloret Launcher 春节小游戏",
     "description": "完成一个简单的小游戏（大约半分钟），感受春节氛围，可获得最多 50 络琅 + 200 金币奖励！",
