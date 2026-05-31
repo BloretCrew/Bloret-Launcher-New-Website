@@ -52,5 +52,18 @@
     "icon": "https://img.bloret.net/img/1769925156328/79a6037022aeb4ee9e71bf1fd85db271",
     "time": "2026-02-14 到 2026-03-03",
     "link": "https://launcher.bloret.net/spr_activity"
+  },
+  "fastdownload":{
+    "enabled": true,
+    "versions": [
+      {
+        "version": "1.21.8",
+        "url": "https://gitcode.com/Bloret/1.21.8.git"
+      },
+      {
+        "version": "1.21.7",
+        "url": "https://gitcode.com/Bloret/1.21.7.git"
+      }
+    ]
   }
 }

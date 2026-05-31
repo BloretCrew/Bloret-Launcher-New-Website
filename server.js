@@ -169,6 +169,22 @@ app.get('/api/info', (req, res) => {
   }
 });
 
+// 新：快速下载信息 API
+app.get('/api/fastdownload', (req, res) => {
+  try {
+    const config = readConfig();
+    const fast = config.fastdownload || { enabled: false, versions: [] };
+    res.json(fast);
+  } catch (error) {
+    console.error('Error reading config for /api/fastdownload:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to read fastdownload config',
+      message: error.message
+    });
+  }
+});
+
 // 新版本发布API
 // app.post('/api/newversion/github', (req, res) => {
 //   try {
