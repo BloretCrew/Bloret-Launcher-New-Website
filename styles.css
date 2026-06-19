@@ -1073,7 +1073,7 @@ button.dock-btn-primary {
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 20px;
     padding: 32px;
-    max-width: 500px;
+    max-width: 680px;
     width: 90%;
     max-height: 80vh;
     overflow-y: auto;
@@ -1175,6 +1175,56 @@ button.dock-btn-primary {
 .modal-links a:hover {
     color: rgba(255, 255, 255, 0.9);
     text-decoration: underline;
+}
+
+/* 模态对话框筛选器 */
+.modal-filter {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.modal-filter-btn {
+    padding: 8px 18px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.modal-filter-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.modal-filter-btn.active {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+/* 模态对话框按钮网格 */
+.modal-buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.modal-buttons-grid .modal-btn {
+    margin: 0;
+}
+
+@media (max-width: 500px) {
+    .modal-buttons-grid {
+        grid-template-columns: 1fr;
+    }
 }
 .download-section {
     margin-top: 60px;

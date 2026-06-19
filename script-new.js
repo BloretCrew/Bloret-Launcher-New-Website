@@ -511,7 +511,7 @@
         const modal = document.getElementById('download-modal');
         const modalButtons = document.getElementById('modal-buttons');
         const modalLinks = document.getElementById('modal-links');
-        
+
         if (!modal || !modalButtons) return;
 
         // 获取下载配置
@@ -525,35 +525,68 @@
 
         if (selectedPlatform && selectedPlatform.architectures) {
             // 显示特定平台的架构选项
-            modalButtons.innerHTML = selectedPlatform.architectures.map(arch => 
+            modalButtons.innerHTML = selectedPlatform.architectures.map(arch =>
                 `<a href="${arch.url}" target="_blank" rel="noopener" class="modal-btn">
                     ${selectedPlatform.icon || ''}
                     <span>${arch.name}</span>
                 </a>`
             ).join('');
         } else {
-            // 显示所有平台
+            // 显示所有平台，带筛选器
+            const platforms = downloads.buttons.map(btn => btn.platform);
+
+            // 生成筛选器 HTML
+            let filterHtml = `<div class="modal-filter">
+                <button class="modal-filter-btn active" data-filter="all" onclick="filterDownloadModal('all')">全部</button>
+                ${platforms.map(p => `<button class="modal-filter-btn" data-filter="${p}" onclick="filterDownloadModal('${p}')">${p}</button>`).join('')}
+            </div>`;
+
+            // 生成按钮网格 HTML
+            let gridHtml = '<div class="modal-buttons-grid">';
             downloads.buttons.forEach(btn => {
                 if (btn.architectures) {
                     btn.architectures.forEach(arch => {
-                        modalButtons.innerHTML += `<a href="${arch.url}" target="_blank" rel="noopener" class="modal-btn">
+                        gridHtml += `<a href="${arch.url}" target="_blank" rel="noopener" class="modal-btn" data-platform="${btn.platform}">
                             ${btn.icon || ''}
-                            <span>${btn.platform} - ${arch.name}</span>
+                            <span>${arch.name}</span>
                         </a>`;
                     });
                 }
             });
+            gridHtml += '</div>';
+
+            modalButtons.innerHTML = filterHtml + gridHtml;
         }
 
         // 渲染扩展链接
         if (modalLinks && downloads.links) {
-            modalLinks.innerHTML = downloads.links.map(link => 
+            modalLinks.innerHTML = downloads.links.map(link =>
                 `<a href="${link.url}" target="_blank" rel="noopener">${link.label}</a>`
             ).join('');
         }
 
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
+    };
+
+    // 筛选下载模态对话框
+    window.filterDownloadModal = function(platform) {
+        const modalButtons = document.getElementById('modal-buttons');
+        if (!modalButtons) return;
+
+        // 更新筛选按钮状态
+        modalButtons.querySelectorAll('.modal-filter-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.filter === platform);
+        });
+
+        // 筛选按钮显示
+        modalButtons.querySelectorAll('.modal-btn[data-platform]').forEach(btn => {
+            if (platform === 'all' || btn.dataset.platform === platform) {
+                btn.style.display = '';
+            } else {
+                btn.style.display = 'none';
+            }
+        });
     };
 
     // 关闭下载模态对话框
