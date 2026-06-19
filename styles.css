@@ -1180,30 +1180,52 @@ button.dock-btn-primary {
 /* 模态对话框筛选器 */
 .modal-filter {
     display: flex;
-    gap: 8px;
+    flex-direction: column;
+    gap: 12px;
     margin-bottom: 20px;
-    justify-content: center;
+}
+
+.modal-filter-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-filter-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+    min-width: 48px;
+}
+
+.modal-filter-tags {
+    display: flex;
+    gap: 6px;
     flex-wrap: wrap;
 }
 
-.modal-filter-btn {
-    padding: 8px 18px;
+.modal-filter-tag {
+    padding: 5px 14px;
     background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 20px;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 13px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 12px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
+    white-space: nowrap;
 }
 
-.modal-filter-btn:hover {
+.modal-filter-tag:hover {
     background: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.85);
 }
 
-.modal-filter-btn.active {
+.modal-filter-tag.active {
     background: rgba(255, 255, 255, 0.15);
     border-color: rgba(255, 255, 255, 0.3);
     color: white;

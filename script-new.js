@@ -506,6 +506,35 @@
         openDownloadModal(matchingBtn);
     };
 
+    // 从架构名称解析元数据（平台、下载源、文件格式）
+    function parseArchMeta(archName, platform) {
+        // 解析下载源: "xxx - GitCode" → "GitCode"
+        let source = 'Other';
+        if (archName.includes('GitCode')) source = 'GitCode';
+        else if (archName.includes('GitHub')) source = 'GitHub';
+
+        // 解析文件格式: 从名称中提取括号内格式或后缀
+        let format = '';
+        const parenMatch = archName.match(/\((\.\w+)\)/);
+        if (parenMatch) {
+            format = parenMatch[1]; // .exe, .zip, .dmg
+        } else if (archName.includes('AppImage')) {
+            format = '.AppImage';
+        }
+
+        // 解析架构标签 (ARM64, Intel 等)
+        let arch = '';
+        if (archName.includes('ARM64') || archName.includes('arm')) arch = 'ARM64';
+        else if (archName.includes('Intel')) arch = 'Intel';
+        else if (archName.includes('AppImage')) arch = 'AppImage';
+        else if (archName.includes('Setup')) arch = 'Setup';
+
+        return { platform, source, format, arch };
+    }
+
+    // 筛选状态
+    let modalFilterState = { platform: 'all', source: 'all', format: 'all' };
+
     // 打开下载模态对话框
     window.openDownloadModal = function(selectedPlatform) {
         const modal = document.getElementById('download-modal');
@@ -532,26 +561,49 @@
                 </a>`
             ).join('');
         } else {
-            // 显示所有平台，带筛选器
-            const platforms = downloads.buttons.map(btn => btn.platform);
+            // 收集所有条目并解析元数据
+            const allItems = [];
+            downloads.buttons.forEach(btn => {
+                if (btn.architectures) {
+                    btn.architectures.forEach(arch => {
+                        const meta = parseArchMeta(arch.name, btn.platform);
+                        allItems.push({ ...arch, icon: btn.icon, meta });
+                    });
+                }
+            });
+
+            // 提取不重复的筛选维度
+            const platforms = [...new Set(allItems.map(i => i.meta.platform))];
+            const sources = [...new Set(allItems.map(i => i.meta.source))];
+            const formats = [...new Set(allItems.map(i => i.meta.format).filter(Boolean))];
+
+            // 重置筛选状态
+            modalFilterState = { platform: 'all', source: 'all', format: 'all' };
 
             // 生成筛选器 HTML
+            const filterGroupHtml = (label, dimension, options) => `
+                <div class="modal-filter-group">
+                    <span class="modal-filter-label">${label}</span>
+                    <div class="modal-filter-tags" data-dimension="${dimension}">
+                        <button class="modal-filter-tag active" data-value="all" onclick="toggleModalFilter('${dimension}','all')">全部</button>
+                        ${options.map(o => `<button class="modal-filter-tag" data-value="${o}" onclick="toggleModalFilter('${dimension}','${o}')">${o}</button>`).join('')}
+                    </div>
+                </div>`;
+
             let filterHtml = `<div class="modal-filter">
-                <button class="modal-filter-btn active" data-filter="all" onclick="filterDownloadModal('all')">全部</button>
-                ${platforms.map(p => `<button class="modal-filter-btn" data-filter="${p}" onclick="filterDownloadModal('${p}')">${p}</button>`).join('')}
+                ${filterGroupHtml('平台', 'platform', platforms)}
+                ${filterGroupHtml('下载源', 'source', sources)}
+                ${filterGroupHtml('格式', 'format', formats)}
             </div>`;
 
             // 生成按钮网格 HTML
             let gridHtml = '<div class="modal-buttons-grid">';
-            downloads.buttons.forEach(btn => {
-                if (btn.architectures) {
-                    btn.architectures.forEach(arch => {
-                        gridHtml += `<a href="${arch.url}" target="_blank" rel="noopener" class="modal-btn" data-platform="${btn.platform}">
-                            ${btn.icon || ''}
-                            <span>${arch.name}</span>
-                        </a>`;
-                    });
-                }
+            allItems.forEach(item => {
+                gridHtml += `<a href="${item.url}" target="_blank" rel="noopener" class="modal-btn"
+                    data-platform="${item.meta.platform}" data-source="${item.meta.source}" data-format="${item.meta.format}">
+                    ${item.icon || ''}
+                    <span>${item.name}</span>
+                </a>`;
             });
             gridHtml += '</div>';
 
@@ -569,25 +621,34 @@
         document.body.style.overflow = 'hidden';
     };
 
-    // 筛选下载模态对话框
-    window.filterDownloadModal = function(platform) {
+    // 切换筛选标签
+    window.toggleModalFilter = function(dimension, value) {
+        modalFilterState[dimension] = value;
+
+        // 更新按钮高亮
+        const tagContainer = document.querySelector(`.modal-filter-tags[data-dimension="${dimension}"]`);
+        if (tagContainer) {
+            tagContainer.querySelectorAll('.modal-filter-tag').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.value === value);
+            });
+        }
+
+        // 应用筛选
+        applyModalFilters();
+    };
+
+    // 应用所有筛选条件
+    function applyModalFilters() {
         const modalButtons = document.getElementById('modal-buttons');
         if (!modalButtons) return;
 
-        // 更新筛选按钮状态
-        modalButtons.querySelectorAll('.modal-filter-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.filter === platform);
-        });
-
-        // 筛选按钮显示
         modalButtons.querySelectorAll('.modal-btn[data-platform]').forEach(btn => {
-            if (platform === 'all' || btn.dataset.platform === platform) {
-                btn.style.display = '';
-            } else {
-                btn.style.display = 'none';
-            }
+            const matchPlatform = modalFilterState.platform === 'all' || btn.dataset.platform === modalFilterState.platform;
+            const matchSource = modalFilterState.source === 'all' || btn.dataset.source === modalFilterState.source;
+            const matchFormat = modalFilterState.format === 'all' || btn.dataset.format === modalFilterState.format;
+            btn.style.display = (matchPlatform && matchSource && matchFormat) ? '' : 'none';
         });
-    };
+    }
 
     // 关闭下载模态对话框
     window.closeDownloadModal = function(event) {
