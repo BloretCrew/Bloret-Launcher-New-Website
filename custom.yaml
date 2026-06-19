@@ -108,12 +108,12 @@ hero:
           - name: "压缩包 (.zip) - GitHub"
             url: "https://github.com/BloretCrew/Bloret-Launcher/releases/download/27RC/Bloret-Launcher-Linux.zip"
     links:
-      - label: "以前的网站"
-        url: "http://pcfs.top:2"
       - label: "Github"
         url: "https://github.com/BloretCrew/Bloret-Launcher"
-      - label: "其他版本下载"
-        url: "http://pcfs.top:2/download.html"
+      - label: "GitCode"
+        url: "https://gitcode.com/Bloret/Bloret-Launcher"
+      - label: "AUR"
+        url: "https://aur.archlinux.org/packages/bloret-launcher"
 
 # 核心服务页 - Minecraft 服务器
 core:
