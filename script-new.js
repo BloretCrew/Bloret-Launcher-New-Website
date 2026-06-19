@@ -357,7 +357,7 @@
         // 渲染版本号
         const versionEl = document.getElementById('dock-version');
         if (versionEl) {
-            versionEl.textContent = `v${downloads.version || '26'}`;
+            versionEl.textContent = `${downloads.version || '27'}`;
         }
 
         // 检测用户系统
@@ -489,7 +489,7 @@
         return 'unknown';
     }
 
-    // 打开当前系统的下载模态对话框 (供顶栏使用)
+    // 顶栏下载按钮：与下载面板主按钮行为一致
     window.openDownloadModalForCurrentOS = function() {
         if (!appConfig) return;
         const downloads = appConfig.hero?.downloads;
@@ -501,9 +501,23 @@
             if (userOS === 'macos' && btn.platform.toLowerCase().includes('macos')) return true;
             if (userOS === 'linux' && btn.platform.toLowerCase().includes('linux')) return true;
             return false;
-        });
+        }) || downloads.buttons[0];
 
-        openDownloadModal(matchingBtn);
+        if (!matchingBtn) return;
+
+        if (userOS === 'windows') {
+            const defaultArch = matchingBtn.architectures?.find(a => a.name.includes('Setup') && a.name.includes('GitCode'));
+            if (defaultArch) window.open(defaultArch.url, '_blank');
+            else openDownloadModal(matchingBtn);
+        } else if (userOS === 'macos') {
+            showMacArchDialog(matchingBtn);
+        } else if (userOS === 'linux') {
+            const defaultArch = matchingBtn.architectures?.find(a => a.name.includes('AppImage') && a.name.includes('GitCode'));
+            if (defaultArch) window.open(defaultArch.url, '_blank');
+            else openDownloadModal(matchingBtn);
+        } else {
+            openDownloadModal(matchingBtn);
+        }
     };
 
     // 从架构名称解析元数据（平台、下载源、文件格式）
