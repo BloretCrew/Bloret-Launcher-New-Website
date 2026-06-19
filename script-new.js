@@ -275,177 +275,6 @@
     requestAnimationFrame(tick);
 })();
 
-// ========== 分页控制系统 ==========
-((global) => {
-    // 分页状态
-    let currentPage = 0;
-    let isAnimating = false;
-    let isScrollLocked = false;
-    const totalPages = 2;
-    const scrollThreshold = 50; // 滚动阈值
-    let touchStartY = 0;
-    let scrollAccumulator = 0;
-
-    // DOM 元素
-    const pagesContainer = document.getElementById('pages-container');
-    const pages = document.querySelectorAll('.page');
-    const paginationDots = document.querySelectorAll('.pagination-dot');
-
-    // 初始化
-    function init() {
-        if (!pagesContainer) return;
-
-        // 绑定导航点击事件
-        paginationDots.forEach(dot => {
-            dot.addEventListener('click', (e) => {
-                const targetPage = parseInt(e.target.dataset.page);
-                if (targetPage !== currentPage && !isAnimating) {
-                    goToPage(targetPage);
-                }
-            });
-        });
-
-        // 绑定滚轮事件
-        global.addEventListener('wheel', handleWheel, { passive: false });
-
-        // 绑定触摸事件（移动端）
-        global.addEventListener('touchstart', handleTouchStart, { passive: true });
-        global.addEventListener('touchend', handleTouchEnd, { passive: true });
-
-        // 绑定键盘事件
-        global.addEventListener('keydown', handleKeydown);
-
-        // 绑定导航链接点击
-        const navLinks = document.querySelectorAll('.nav-link');
-        navLinks.forEach((link) => {
-            link.addEventListener('click', (e) => {
-                const href = link.getAttribute('href');
-                if (href && href.startsWith('#')) {
-                    e.preventDefault();
-                    if (href === '#hero') goToPage(0);
-                    else if (href === '#features') goToPage(1);
-                }
-            });
-        });
-
-        // 初始化第一页
-        updateActiveStates();
-    }
-
-    // 处理滚轮事件
-    function handleWheel(e) {
-        if (isAnimating) {
-            e.preventDefault();
-            return;
-        }
-
-        const delta = e.deltaY;
-        scrollAccumulator += delta;
-
-        if (Math.abs(scrollAccumulator) > scrollThreshold) {
-            if (scrollAccumulator > 0 && currentPage < totalPages - 1) {
-                goToPage(currentPage + 1);
-            } else if (scrollAccumulator < 0 && currentPage > 0) {
-                goToPage(currentPage - 1);
-            }
-            scrollAccumulator = 0;
-            e.preventDefault();
-        }
-    }
-
-    // 处理触摸开始
-    function handleTouchStart(e) {
-        touchStartY = e.touches[0].clientY;
-    }
-
-    // 处理触摸结束
-    function handleTouchEnd(e) {
-        if (isAnimating) return;
-
-        const touchEndY = e.changedTouches[0].clientY;
-        const diff = touchStartY - touchEndY;
-
-        if (Math.abs(diff) > 50) {
-            if (diff > 0 && currentPage < totalPages - 1) {
-                goToPage(currentPage + 1);
-            } else if (diff < 0 && currentPage > 0) {
-                goToPage(currentPage - 1);
-            }
-        }
-    }
-
-    // 处理键盘事件
-    function handleKeydown(e) {
-        if (isAnimating) return;
-
-        switch (e.key) {
-            case 'ArrowDown':
-            case 'PageDown':
-                if (currentPage < totalPages - 1) {
-                    e.preventDefault();
-                    goToPage(currentPage + 1);
-                }
-                break;
-            case 'ArrowUp':
-            case 'PageUp':
-                if (currentPage > 0) {
-                    e.preventDefault();
-                    goToPage(currentPage - 1);
-                }
-                break;
-            case 'Home':
-                e.preventDefault();
-                goToPage(0);
-                break;
-            case 'End':
-                e.preventDefault();
-                goToPage(totalPages - 1);
-                break;
-        }
-    }
-
-    // 切换到指定页面
-    function goToPage(targetPage) {
-        if (isAnimating || targetPage === currentPage) return;
-        if (targetPage < 0 || targetPage >= totalPages) return;
-
-        isAnimating = true;
-
-        // 移除当前页面激活状态
-        pages[currentPage].classList.remove('active');
-
-        // 添加目标页面激活状态
-        currentPage = targetPage;
-        pages[currentPage].classList.add('active');
-
-        // 更新导航指示器
-        updateActiveStates();
-
-        // 动画完成后解锁
-        setTimeout(() => {
-            isAnimating = false;
-        }, 700); // 与 CSS transition 时间一致
-    }
-
-    // 更新激活状态
-    function updateActiveStates() {
-        paginationDots.forEach((dot, index) => {
-            if (index === currentPage) {
-                dot.classList.add('active');
-            } else {
-                dot.classList.remove('active');
-            }
-        });
-    }
-
-    // 页面加载完成后初始化
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
-})(window);
-
 // ========== 配置渲染系统 ==========
 ((global) => {
     let appConfig = null;
@@ -524,7 +353,7 @@
     // 渲染下载区域
     function renderDownloads(downloads) {
         console.log('开始渲染下载区域...', downloads);
-        
+
         // 渲染版本号
         const versionEl = document.getElementById('dock-version');
         if (versionEl) {
@@ -535,8 +364,43 @@
         const userOS = detectUserOS();
         const primaryButton = document.getElementById('dock-primary_btn');
         const otherButton = document.getElementById('dock_other_btn');
-        
+        const dockContent = document.querySelector('.dock-content');
+
         console.log('用户系统:', userOS);
+
+        // Linux 用户：添加 AUR 安装命令
+        const existingCmd = document.getElementById('dock-aur-cmd');
+        if (existingCmd) existingCmd.remove();
+
+        if (userOS === 'linux' && dockContent) {
+            const cmdBar = document.createElement('div');
+            cmdBar.className = 'dock-aur-cmd';
+            cmdBar.id = 'dock-aur-cmd';
+            cmdBar.innerHTML = `
+                <code>yay -S bloret-launcher</code>
+                <button class="dock-aur-copy" type="button" title="复制命令">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                    </svg>
+                </button>
+            `;
+            // 插入到 dock-info 之后
+            const dockInfo = dockContent.querySelector('.dock-info');
+            if (dockInfo) {
+                dockInfo.after(cmdBar);
+            }
+
+            // 复制按钮事件
+            cmdBar.querySelector('.dock-aur-copy').addEventListener('click', function() {
+                navigator.clipboard.writeText('yay -S bloret-launcher').then(() => {
+                    this.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>`;
+                    setTimeout(() => {
+                        this.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>`;
+                    }, 1500);
+                });
+            });
+        }
 
         // 获取匹配的平台
         const matchingBtn = downloads.buttons.find(btn => {
@@ -548,11 +412,31 @@
 
         const platformName = matchingBtn.platform;
         const iconHtml = matchingBtn.icon || '';
-        
-        // 设置下载岛主按钮
+
+        // 根据平台设置主按钮的默认下载行为
         if (primaryButton) {
             primaryButton.innerHTML = `<div class="dock-btn-content">${iconHtml}<span>下载 ${platformName}</span></div>`;
-            primaryButton.onclick = function() { openDownloadModal(matchingBtn); };
+
+            if (userOS === 'windows') {
+                // Windows：默认下载 Setup (.exe) - GitCode
+                const defaultArch = matchingBtn.architectures?.find(a => a.name.includes('Setup') && a.name.includes('GitCode'));
+                primaryButton.onclick = function() {
+                    if (defaultArch) window.open(defaultArch.url, '_blank');
+                    else openDownloadModal(matchingBtn);
+                };
+            } else if (userOS === 'macos') {
+                // macOS：弹出架构选择对话框
+                primaryButton.onclick = function() { showMacArchDialog(matchingBtn); };
+            } else if (userOS === 'linux') {
+                // Linux：默认下载 AppImage - GitCode
+                const defaultArch = matchingBtn.architectures?.find(a => a.name.includes('AppImage') && a.name.includes('GitCode'));
+                primaryButton.onclick = function() {
+                    if (defaultArch) window.open(defaultArch.url, '_blank');
+                    else openDownloadModal(matchingBtn);
+                };
+            } else {
+                primaryButton.onclick = function() { openDownloadModal(matchingBtn); };
+            }
         }
 
         // 设置"其他系统"按钮
@@ -562,6 +446,38 @@
 
         // 更新顶栏下载按钮文字
         updateNavDownloadButton();
+    }
+
+    // macOS 架构选择对话框
+    function showMacArchDialog(macBtn) {
+        const armArch = macBtn.architectures?.find(a => a.name.toLowerCase().includes('arm') && a.name.includes('GitCode'));
+        const intelArch = macBtn.architectures?.find(a => a.name.toLowerCase().includes('intel') && a.name.includes('GitCode'));
+
+        const modal = document.getElementById('download-modal');
+        const modalButtons = document.getElementById('modal-buttons');
+        const modalLinks = document.getElementById('modal-links');
+        if (!modal || !modalButtons) return;
+
+        modalButtons.innerHTML = `
+            <div class="mac-arch-dialog">
+                <p class="mac-arch-hint">请选择你的 Mac 类型：</p>
+                <div class="mac-arch-options">
+                    <a href="${armArch?.url || '#'}" target="_blank" rel="noopener" class="modal-btn mac-arch-btn">
+                        <span class="mac-arch-label">Apple Silicon (ARM)</span>
+                        <span class="mac-arch-desc">M1 / M2 / M3 / M4 芯片的 Mac</span>
+                    </a>
+                    <a href="${intelArch?.url || '#'}" target="_blank" rel="noopener" class="modal-btn mac-arch-btn">
+                        <span class="mac-arch-label">Intel</span>
+                        <span class="mac-arch-desc">较早期的 Intel 芯片 Mac</span>
+                    </a>
+                </div>
+                <p class="mac-arch-tip">💡 不确定？点击左上角  → 关于本机，查看「芯片」信息。<br>如果显示 Apple M1/M2/M3/M4 则选 ARM，否则选 Intel。</p>
+            </div>
+        `;
+        if (modalLinks) modalLinks.innerHTML = '';
+
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
     }
 
     // 检测用户操作系统
@@ -675,7 +591,6 @@
             features.forEach((feature, index) => {
                 const card = document.createElement('div');
                 card.className = 'feature-card';
-                card.style.transitionDelay = `${0.2 + index * 0.1}s`;
                 card.innerHTML = `
                     <div class="feature-icon">${feature.icon}</div>
                     <h3 class="feature-title">${feature.title}</h3>
@@ -745,6 +660,8 @@
         const showcase = document.getElementById('editor-showcase');
         if (!showcase) return;
 
+        const version = appConfig?.hero?.downloads?.version || '27RC';
+
         showcase.innerHTML = `
             <div class="editor-container">
                 <div class="editor-topbar">
@@ -767,7 +684,7 @@
                         <div class="welcome-text">
                             <h3>欢迎使用 Bloret Launcher</h3>
                             <p>AI 驱动的 Minecraft 启动器</p>
-                            <p>版本 26 - 现已可用</p>
+                            <p>版本 ${version} - 现已可用</p>
                         </div>
                     </div>
                 </div>

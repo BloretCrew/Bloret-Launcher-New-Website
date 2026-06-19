@@ -123,7 +123,7 @@ app.get('/api/info', (req, res) => {
     if (config.BLLatest) {
       downloads.stable = {
         gitcode: {
-          exe: `https://gitcode.com/Bloret/Bloret-Launcher-Setup/releases/download/26R/Bloret-Launcher-Setup.exe`,
+          exe: `https://gitcode.com/Bloret/Bloret-Launcher-Setup/releases/download/27RC/Bloret-Launcher-Setup.exe`,
           zip: `https://gitcode.com/Bloret/Bloret-Launcher/releases/download/${config.BLLatest}/Bloret-Launcher-Windows.zip`
         },
         github: {
