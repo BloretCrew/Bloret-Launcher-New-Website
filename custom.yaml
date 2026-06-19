@@ -24,14 +24,22 @@ navbar:
 hero:
   # 标题动画列表（循环播放）
   titles:
-    - main: "AI-powered Minecraft Launcher"
-      sub: "AI 驱动的 Minecraft 启动器"
-    - main: "A completely open-source\nMinecraft Launcher"
-      sub: "完全开源的 Minecraft 启动器"
-    - main: "Forge & NeoForge\nSupport"
-      sub: "支持 Forge 与 NeoForge 模组加载器"
-    - main: "Modrinth Modpacks\n& Resource Pack Editor"
-      sub: "集成 Modrinth 整合包与资源包编辑器"
+    - main: "Be creative, be simple."
+      sub: "发挥创意，化繁为简。"
+    - main: "Your Personal Innovative Open Source AI Minecraft Launcher."
+      sub: "你的专属创新开源人工智能 Minecraft 启动器"
+    - main: "Relax, it's Bloret Launcher."
+      sub: "放轻松，这是 Bloret Launcher。"
+    - main: "Built-in Minecraft resource pack editor"
+      sub: "内置 Minecraft 资源包编辑器"
+    - main: "Integrating AI Agents to Assist Development"
+      sub: "集成 AI Agent 辅助开发"
+    - main: "DeepSeek v4 Flash is provided free of charge by OpenCode Zen."
+      sub: "由 OpenCode Zen 免费提供 DeepSeek v4 Flash"
+    - main: "Completely free and open source"
+      sub: "完全免费开源"
+    - main: "Powered by RinUI"
+      sub: "依赖 RinUI，拥抱流畅又美观的 Microsoft Fluent 2 Design"
   # 滚动提示文字
   scrollHint: "向下滚动探索"
   # Launcher 功能特性
